@@ -1,0 +1,332 @@
+﻿Imports System.Math
+
+Public Class Plane3d
+
+    Implements ICloneable
+
+    Private _point As Point3d
+    Private _normal As Vector3d
+    Private _coord As Coord3d
+
+    ''' <summary>
+    ''' Creates default XY plane
+    ''' </summary>
+    Public Sub New()
+        _point = New Point3d(0, 0, 0)
+        _normal = New Vector3d(1, 0, 0)
+    End Sub
+    Public Sub New(aa As Double, bb As Double, cc As Double, dd As Double, Optional coord As Coord3d = Nothing)
+        If coord Is Nothing Then
+            coord = Coord3d.GlobalCS
+        End If
+        If Abs(aa) > Abs(bb) AndAlso Abs(aa) > Abs(cc) Then
+            _point = New Point3d(-dd / aa, 0, 0, coord)
+        ElseIf Abs(bb) > Abs(aa) AndAlso Abs(bb) > Abs(cc) Then
+            _point = New Point3d(0, -dd / bb, 0, coord)
+        Else
+            _point = New Point3d(0, 0, -dd / cc, coord)
+        End If
+        _normal = New Vector3d(aa, bb, cc, coord)
+    End Sub
+    Public Sub New(p1 As Point3d, p2 As Point3d, p3 As Point3d)
+        Dim v1 As Vector3d = New Vector3d(p1, p2)
+        Dim v2 As Vector3d = New Vector3d(p1, p3)
+        _normal = v1.Cross(v2)
+        _point = p1
+    End Sub
+    Public Sub New(p1 As Point3d, v1 As Vector3d, v2 As Vector3d)
+        _normal = v1.Cross(v2)
+        _point = p1
+    End Sub
+    Public Sub New(p1 As Point3d, v1 As Vector3d)
+        _normal = v1
+        _point = p1
+    End Sub
+
+    Public Function Clone() As Object Implements ICloneable.Clone
+        Return DirectCast(MemberwiseClone(), Plane3d)
+    End Function
+
+    ''' <summary>
+    ''' Base point of the line
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property Point As Point3d
+        Get
+            Return _point.Clone
+        End Get
+        Set(value As Point3d)
+            _point = value.Clone
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Direction vector of the line
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property Direction As Vector3d
+        Get
+            Return _normal.Clone
+        End Get
+        Set(value As Vector3d)
+            _normal = value.Clone
+        End Set
+    End Property
+
+    Public Sub SetCoord(coord As Coord3d)
+        _coord = coord
+    End Sub
+
+    Public ReadOnly Property A As Double
+        Get
+            A = _normal.ConvertTo(_coord).X
+        End Get
+    End Property
+    Public ReadOnly Property B As Double
+        Get
+            B = _normal.ConvertTo(_coord).Y
+        End Get
+    End Property
+    Public ReadOnly Property C As Double
+        Get
+            C = _normal.ConvertTo(_coord).Z
+        End Get
+    End Property
+    Public ReadOnly Property D As Double
+        Get
+            Dim p As Point3d = _point.ConvertTo(_coord)
+            Dim v As Vector3d = _normal.ConvertTo(_coord)
+            D = -v.X * p.X - v.Y * p.Y - v.Z * p.Z
+        End Get
+    End Property
+
+    Public ReadOnly Property Normal As Vector3d
+        Get
+            Return _normal.Clone
+        End Get
+    End Property
+
+
+
+
+    ''' <summary>
+    ''' Get intersection of line with plane.
+    ''' Returns object of type 'Nothing', 'Point3d' or 'Line3d'.
+    ''' </summary>
+    Public Function IntersectionWith(l As Line3d) As Object
+        Dim r1 As Vector3d = New Vector3d(l.Point)
+        Dim s1 As Vector3d = l.Direction
+        Dim n2 As Vector3d = Me.Normal
+        If Abs(s1 * n2) < GeometRi3D.Tolerance Then
+            ' Line and plane are parallel
+            If l.Point.BelongsTo(Me) Then
+                ' Line lies in the plane
+                Return l
+            Else
+                Return Nothing
+            End If
+        Else
+            r1 = r1 - ((r1 * n2) + Me.D) / (s1 * n2) * s1
+            Return r1.ToPoint
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Finds the common intersection of three planes.
+    ''' Return object of type 'Nothing', 'Point3d', 'Line3d' or 'Plane3d'
+    ''' </summary>
+    Public Function IntersectionWith(s2 As Plane3d, s3 As Plane3d) As Object
+        ' Set all planes to global CS
+        Me.SetCoord(Coord3d.GlobalCS)
+        s2.SetCoord(Coord3d.GlobalCS)
+        s3.SetCoord(Coord3d.GlobalCS)
+        Dim det As Double = New Matrix3d({A, B, C}, {s2.A, s2.B, s2.C}, {s3.A, s3.B, s3.C}).Det
+        If Abs(det) < GeometRi3D.Tolerance Then
+            If Me.Normal.IsParallelTo(s2.Normal) AndAlso Me.Normal.IsParallelTo(s3.Normal) Then
+                ' Planes are coplanar
+                If Me.Point.BelongsTo(s2) AndAlso Me.Point.BelongsTo(s3) Then
+                    Return Me
+                Else
+                    Return Nothing
+                End If
+            End If
+            If Me.Normal.IsNotParallelTo(s2.Normal) AndAlso Me.Normal.IsNotParallelTo(s3.Normal) Then
+                ' Planes are not parallel
+                ' Find the intersection (Me,s2) and (Me,s3) and check if it is the same line
+                Dim l1 As Line3d = Me.IntersectionWith(s2)
+                Dim l2 As Line3d = Me.IntersectionWith(s3)
+                If l1 = l2 Then
+                    Return l1
+                Else
+                    Return Nothing
+                End If
+            End If
+
+            ' Two planes are parallel, third plane is not
+            Return Nothing
+
+        Else
+            Dim x As Double = -New Matrix3d({D, B, C}, {s2.D, s2.B, s2.C}, {s3.D, s3.B, s3.C}).Det / det
+            Dim y As Double = -New Matrix3d({A, D, C}, {s2.A, s2.D, s2.C}, {s3.A, s3.D, s3.C}).Det / det
+            Dim z As Double = -New Matrix3d({A, B, D}, {s2.A, s2.B, s2.D}, {s3.A, s3.B, s3.D}).Det / det
+            Return New Point3d(x, y, z)
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Get intersection of two planes.
+    ''' Returns object of type 'Nothing', 'Line3d' or 'Plane3d'.
+    ''' </summary>
+    Public Function IntersectionWith(s2 As Plane3d) As Object
+        Dim v As Vector3d = Me.Normal.Cross(s2.Normal).ConvertToGlobal
+        If v.Norm < GeometRi3D.Tolerance Then
+            ' Planes are coplanar
+            If Me.Point.BelongsTo(s2) Then
+                Return Me
+            Else
+                Return Nothing
+            End If
+
+        Else
+            ' Find the common point for two planes by intersecting with third plane
+            ' (using the 'most orthogonal' plane)
+            ' This part needs to be rewritten
+            If Abs(v.X) > Abs(v.Y) AndAlso Abs(v.X) > Abs(v.Z) Then
+                Dim p As Point3d = Me.IntersectionWith(s2, Coord3d.GlobalCS.YZ_plane)
+                Return New Line3d(p, v)
+            ElseIf Abs(v.Y) > Abs(v.X) AndAlso Abs(v.Y) > Abs(v.Z) Then
+                Dim p As Point3d = Me.IntersectionWith(s2, Coord3d.GlobalCS.XZ_plane)
+                Return New Line3d(p, v)
+            Else
+                Dim p As Point3d = Me.IntersectionWith(s2, Coord3d.GlobalCS.XY_plane)
+                Return New Line3d(p, v)
+            End If
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Angle between vector and plane in radians (0 &lt; angle &lt; Pi/2)
+    ''' </summary>
+    Public Function AngleTo(v As Vector3d) As Double
+        Return Abs(PI / 2 - Me.Normal.AngleTo(v))
+    End Function
+    ''' <summary>
+    ''' Angle between vector and plane in degrees (0 &lt; angle &lt; 90)
+    ''' </summary>
+    Public Function AngleDegTo(v As Vector3d) As Double
+        Return Abs(90.0 - Me.Normal.AngleDegTo(v))
+    End Function
+
+    ''' <summary>
+    ''' Angle between line and plane in radians (0 &lt; angle &lt; Pi/2)
+    ''' </summary>
+    Public Function AngleTo(l As Line3d) As Double
+        Return Abs(PI / 2 - Me.Normal.AngleTo(l.Direction))
+    End Function
+    ''' <summary>
+    ''' Angle between line and plane in degrees (0 &lt; angle &lt; 90)
+    ''' </summary>
+    Public Function AngleDegTo(l As Line3d) As Double
+        Return Abs(90.0 - Me.Normal.AngleDegTo(l.Direction))
+    End Function
+
+    ''' <summary>
+    ''' Angle between two planes in radians (0 &lt; angle &lt; Pi/2)
+    ''' </summary>
+    Public Function AngleTo(s As Plane3d) As Double
+        Dim ang As Double = Me.Normal.AngleTo(s.Normal)
+        If ang <= PI / 2 Then
+            Return ang
+        Else
+            Return PI - ang
+        End If
+    End Function
+    ''' <summary>
+    ''' Angle between two planes in degrees (0 &lt; angle &lt; 90)
+    ''' </summary>
+    Public Function AngleDegTo(s As Plane3d) As Double
+        Return AngleTo(s) * 180 / PI
+    End Function
+
+    ''' <summary>
+    ''' Translate plane by a vector
+    ''' </summary>
+    Public Function Translate(v As Vector3d) As Plane3d
+        Return New Plane3d(Me.Point.Translate(v), Me.Normal)
+    End Function
+
+    ''' <summary>
+    ''' Rotate plane by a given rotation matrix
+    ''' </summary>
+    Public Function Rotate(ByVal m As Matrix3d) As Plane3d
+        Return New Plane3d(Me.Point.Rotate(m), Me.Normal.Rotate(m))
+    End Function
+
+    ''' <summary>
+    ''' Rotate plane by a given rotation matrix around point 'p' as a rotation center
+    ''' </summary>
+    Public Function Rotate(m As Matrix3d, p As Point3d) As Plane3d
+        Return New Plane3d(Me.Point.Rotate(m, p), Me.Normal.Rotate(m))
+    End Function
+
+    ''' <summary>
+    ''' Reflect plane in given point
+    ''' </summary>
+    Public Function ReflectIn(p As Point3d) As Plane3d
+        Return New Plane3d(Me.Point.ReflectIn(p), Me.Normal.ReflectIn(p))
+    End Function
+
+    ''' <summary>
+    ''' Reflect plane in given line
+    ''' </summary>
+    Public Function ReflectIn(l As Line3d) As Plane3d
+        Return New Plane3d(Me.Point.ReflectIn(l), Me.Normal.ReflectIn(l))
+    End Function
+
+    ''' <summary>
+    ''' Reflect plane in given plane
+    ''' </summary>
+    Public Function ReflectIn(s As Plane3d) As Plane3d
+        Return New Plane3d(Me.Point.ReflectIn(s), Me.Normal.ReflectIn(s))
+    End Function
+
+    Public Overloads Overrides Function Equals(obj As Object) As Boolean
+        If obj Is Nothing OrElse Not Me.GetType() Is obj.GetType() Then
+            Return False
+        End If
+        Dim s As Plane3d = CType(obj, Plane3d)
+
+        Return s.Point.BelongsTo(Me) AndAlso s.Normal.IsParallelTo(Me.Normal)
+    End Function
+
+    Public Overrides Function ToString() As String
+        Dim str As New System.Text.StringBuilder
+        Dim P As Point3d = _point.ConvertToGlobal
+        Dim normal As Vector3d = _normal.ConvertToGlobal
+        str.Append("Plane3d:" + vbCrLf)
+        str.Append(String.Format("Point  -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", P.X, P.Y, P.Z) + vbCrLf)
+        str.Append(String.Format("Normal -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", normal.X, normal.Y, normal.Z))
+        Return str.ToString
+    End Function
+
+    Public Overloads Function ToString(coord As Coord3d) As String
+        Dim str As New System.Text.StringBuilder
+        Dim P As Point3d = _point.ConvertTo(coord)
+        Dim normal As Vector3d = _normal.ConvertTo(coord)
+        str.Append("Plane3d:" + vbCrLf)
+        str.Append(String.Format("Point  -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", P.X, P.Y, P.Z) + vbCrLf)
+        str.Append(String.Format("Normal -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", normal.X, normal.Y, normal.Z))
+        Return str.ToString
+    End Function
+
+    ' Operators overloads
+    '-----------------------------------------------------------------
+
+    Public Shared Operator =(s1 As Plane3d, s2 As Plane3d) As Boolean
+        Return s1.Equals(s2)
+    End Operator
+    Public Shared Operator <>(s1 As Plane3d, s2 As Plane3d) As Boolean
+        Return Not s1.Equals(s2)
+    End Operator
+
+End Class
