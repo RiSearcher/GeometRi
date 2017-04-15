@@ -437,6 +437,15 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         GeometRi3D.Tolerance = 0.000000000001
     End Sub
 
+    <TestMethod()> Public Sub CoordSystemTest()
+        Dim c1 As Coord3d = New Coord3d(New Point3d(), {2, 0, 0}, {1, 1, 0})
+        Assert.IsTrue(c1.Axes = Matrix3d.Identity)
+
+        c1 = New Coord3d(New Point3d(), New Vector3d(2, 0, 0), New Vector3d(0, 0, 5))
+        c1.RotateDeg(New Vector3d(1, 0, 0), -90)
+        Assert.IsTrue(c1.Axes = Matrix3d.Identity)
+    End Sub
+
     '===============================================================
     ' Coordinate transformation tests
     '===============================================================

@@ -6,7 +6,7 @@ Public Class Coord3d
 
     Private _origin As Point3d
     Private _axes As Matrix3d
-    Public Name As String
+    Public _name As String
     Private Shared count As Integer = 0
     Public Shared ReadOnly GlobalCS As Coord3d = New Coord3d("Global_CS")
 
@@ -48,66 +48,105 @@ Public Class Coord3d
         End Get
     End Property
 
-    Public Sub New(Optional str As String = "")
+
+#Region "Constructors"
+    ''' <summary>
+    ''' Create default coordinate system.
+    ''' </summary>
+    ''' <param name="name">Name of the coordinate system.</param>
+    Public Sub New(Optional name As String = "")
         _origin = New Point3d(0, 0, 0)
         _axes = Matrix3d.Identity
-        If (str <> "") Then
-            Name = str
+        If (name <> "") Then
+            _name = name
         Else
-            Name = "Coord " + count.ToString
+            _name = "Coord " + count.ToString
         End If
         count += 1
     End Sub
-    Public Sub New(ByVal p As Point3d, ByVal m As Matrix3d, Optional str As String = "")
+
+    ''' <summary>
+    ''' Create coordinate system by origin and transformation matrix.
+    ''' </summary>
+    ''' <param name="p">Origin of the coordinate system.</param>
+    ''' <param name="m">Transformation matrix.</param>
+    ''' <param name="name">Name of the coordinate system.</param>
+    Public Sub New(ByVal p As Point3d, ByVal m As Matrix3d, Optional name As String = "")
         If Not m.IsOrthogonal Then
             Throw New ArgumentException("The matrix is not orthogonal")
         End If
 
         _origin = p.ConvertToGlobal
         _axes = m.Clone
-        If (str <> "") Then
-            Name = str
+        If (name <> "") Then
+            _name = name
         Else
-            Name = "Coord " + count.ToString
+            _name = "Coord " + count.ToString
         End If
         count += 1
     End Sub
-    Public Sub New(p As Point3d, v1 As Vector3d, v2 As Vector3d, v3 As Vector3d, Optional str As String = "")
-        Dim m As Matrix3d = New Matrix3d(v1.ConvertToGlobal.Normalized, v2.ConvertToGlobal.Normalized, v3.ConvertToGlobal.Normalized)
-        If Not m.IsOrthogonal Then
-            Throw New ArgumentException("The matrix is not orthogonal")
+
+    ''' <summary>
+    ''' Create coordinate system by point and two vectors.
+    ''' </summary>
+    ''' <param name="p">Origin of the coordinate system.</param>
+    ''' <param name="v1">Vector oriented along the X axis.</param>
+    ''' <param name="v2">Vector in the XY plane.</param>
+    ''' <param name="name">Name of the coordinate system.</param>
+    Public Sub New(p As Point3d, v1 As Vector3d, v2 As Vector3d, Optional name As String = "")
+        If v1.IsParallelTo(v2) Then
+            Throw New Exception("Vectors are parallel")
         End If
 
-        _origin = p.ConvertToGlobal
-        _axes = m
-        If (str <> "") Then
-            Name = str
-        Else
-            Name = "Coord " + count.ToString
-        End If
-        count += 1
-    End Sub
-    Public Sub New(p As Point3d, v1() As Double, v2() As Double, v3() As Double, Optional str As String = "")
-        Dim m As Matrix3d = New Matrix3d(v1, v2, v3)
-        If Not m.IsOrthogonal Then
-            Throw New ArgumentException("The matrix is not orthogonal")
-        End If
+        v1 = v1.ConvertToGlobal.Normalized
+        Dim v3 As Vector3d = v1.Cross(v2).Normalized
+        v2 = v3.Cross(v1).Normalized
 
         _origin = p.ConvertToGlobal
-        _axes = m
-        If (str <> "") Then
-            Name = str
+        _axes = New Matrix3d(v1, v2, v3)
+        If (name <> "") Then
+            _name = name
         Else
-            Name = "Coord " + count.ToString
+            _name = "Coord " + count.ToString
         End If
         count += 1
     End Sub
+
+    ''' <summary>
+    ''' Create coordinate system by point and two vectors (as Double())
+    ''' </summary>
+    ''' <param name="p">Origin of the coordinate system.</param>
+    ''' <param name="d1">Vector oriented along the X axis.</param>
+    ''' <param name="d2">Vector in the XY plane.</param>
+    ''' <param name="name">Name of the coordinate system.</param>
+    Public Sub New(p As Point3d, d1() As Double, d2() As Double, Optional name As String = "")
+        Dim v1 As New Vector3d(d1)
+        Dim v2 As New Vector3d(d2)
+        If v1.IsParallelTo(v2) Then
+            Throw New Exception("Vectors are parallel")
+        End If
+
+        v1 = v1.Normalized
+        Dim v3 As Vector3d = v1.Cross(v2).Normalized
+        v2 = v3.Cross(v1).Normalized
+
+        _origin = p.ConvertToGlobal
+        _axes = New Matrix3d(v1, v2, v3)
+        If (name <> "") Then
+            _name = name
+        Else
+            _name = "Coord " + count.ToString
+        End If
+        count += 1
+    End Sub
+#End Region
+
 
     Public Function Clone() As Object Implements ICloneable.Clone
         Dim newobj As Coord3d = DirectCast(MemberwiseClone(), Coord3d)
         newobj.Origin = newobj.Origin.Clone
         newobj.Axes = newobj.Axes.Clone
-        newobj.Name = "Coord " + count.ToString
+        newobj._name = "Coord " + count.ToString
         count += 1
         Return newobj
     End Function
@@ -166,12 +205,12 @@ Public Class Coord3d
             Return False
         End If
         Dim cs As Coord3d = CType(obj, Coord3d)
-        Return Me.Name = cs.Name
+        Return Me._name = cs._name
     End Function
 
     Public Overrides Function ToString() As String
         Dim str As New System.Text.StringBuilder
-        str.Append("Coord3d: " + Name + vbCrLf)
+        str.Append("Coord3d: " + _name + vbCrLf)
         str.Append(String.Format("Origin -> X: {0,10:g5}, Y: {1,10:g5}, Z: {2,10:g5}", _origin.X, _origin.Y, _origin.Z) + vbCrLf)
         str.Append(String.Format("Xaxis  -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", Xaxis.X, Xaxis.Y, Xaxis.Z) + vbCrLf)
         str.Append(String.Format("Yaxis  -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", Yaxis.X, Yaxis.Y, Yaxis.Z) + vbCrLf)
