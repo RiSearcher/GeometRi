@@ -8,40 +8,69 @@ Public Class Plane3d
     Private _normal As Vector3d
     Private _coord As Coord3d
 
+#Region "Constructors"
     ''' <summary>
-    ''' Creates default XY plane
+    ''' Create default XY plane
     ''' </summary>
     Public Sub New()
         _point = New Point3d(0, 0, 0)
         _normal = New Vector3d(1, 0, 0)
     End Sub
-    Public Sub New(aa As Double, bb As Double, cc As Double, dd As Double, Optional coord As Coord3d = Nothing)
+
+    ''' <summary>
+    ''' Create plane using general equation in 3D space: A*x+B*y+C*z+D=0.
+    ''' </summary>
+    ''' <param name="a">Parameter "A" in general plane equation.</param>
+    ''' <param name="b">Parameter "B" in general plane equation.</param>
+    ''' <param name="c">Parameter "C" in general plane equation.</param>
+    ''' <param name="d">Parameter "D" in general plane equation.</param>
+    ''' <param name="coord">Coordinate system in which plane equation is defined (default: Coord3d.GlobalCS).</param>
+    Public Sub New(a As Double, b As Double, c As Double, d As Double, Optional coord As Coord3d = Nothing)
         If coord Is Nothing Then
             coord = Coord3d.GlobalCS
         End If
-        If Abs(aa) > Abs(bb) AndAlso Abs(aa) > Abs(cc) Then
-            _point = New Point3d(-dd / aa, 0, 0, coord)
-        ElseIf Abs(bb) > Abs(aa) AndAlso Abs(bb) > Abs(cc) Then
-            _point = New Point3d(0, -dd / bb, 0, coord)
+        If Abs(a) > Abs(b) AndAlso Abs(a) > Abs(c) Then
+            _point = New Point3d(-d / a, 0, 0, coord)
+        ElseIf Abs(b) > Abs(a) AndAlso Abs(b) > Abs(c) Then
+            _point = New Point3d(0, -d / b, 0, coord)
         Else
-            _point = New Point3d(0, 0, -dd / cc, coord)
+            _point = New Point3d(0, 0, -d / c, coord)
         End If
-        _normal = New Vector3d(aa, bb, cc, coord)
+        _normal = New Vector3d(a, b, c, coord)
     End Sub
+
+    ''' <summary>
+    ''' Create plane by three points.
+    ''' </summary>
+    ''' <param name="p1">First point.</param>
+    ''' <param name="p2">Second point.</param>
+    ''' <param name="p3">Third point.</param>
     Public Sub New(p1 As Point3d, p2 As Point3d, p3 As Point3d)
         Dim v1 As Vector3d = New Vector3d(p1, p2)
         Dim v2 As Vector3d = New Vector3d(p1, p3)
         _normal = v1.Cross(v2)
         _point = p1
     End Sub
+
+    ''' <summary>
+    ''' Create plane by point and two vectors lying in the plane.
+    ''' </summary>
     Public Sub New(p1 As Point3d, v1 As Vector3d, v2 As Vector3d)
         _normal = v1.Cross(v2)
         _point = p1
     End Sub
+
+    ''' <summary>
+    ''' Create plane by point and normal vector.
+    ''' </summary>
+    ''' <param name="p1"></param>
+    ''' <param name="v1"></param>
     Public Sub New(p1 As Point3d, v1 As Vector3d)
         _normal = v1
         _point = p1
     End Sub
+#End Region
+
 
     Public Function Clone() As Object Implements ICloneable.Clone
         Return DirectCast(MemberwiseClone(), Plane3d)
@@ -248,6 +277,7 @@ Public Class Plane3d
         Return AngleTo(s) * 180 / PI
     End Function
 
+#Region "TranslateRotateReflect"
     ''' <summary>
     ''' Translate plane by a vector
     ''' </summary>
@@ -289,6 +319,7 @@ Public Class Plane3d
     Public Function ReflectIn(s As Plane3d) As Plane3d
         Return New Plane3d(Me.Point.ReflectIn(s), Me.Normal.ReflectIn(s))
     End Function
+#End Region
 
     Public Overloads Overrides Function Equals(obj As Object) As Boolean
         If obj Is Nothing OrElse Not Me.GetType() Is obj.GetType() Then
@@ -299,20 +330,14 @@ Public Class Plane3d
         Return s.Point.BelongsTo(Me) AndAlso s.Normal.IsParallelTo(Me.Normal)
     End Function
 
-    Public Overrides Function ToString() As String
+    Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
         Dim str As New System.Text.StringBuilder
         Dim P As Point3d = _point.ConvertToGlobal
         Dim normal As Vector3d = _normal.ConvertToGlobal
-        str.Append("Plane3d:" + vbCrLf)
-        str.Append(String.Format("Point  -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", P.X, P.Y, P.Z) + vbCrLf)
-        str.Append(String.Format("Normal -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", normal.X, normal.Y, normal.Z))
-        Return str.ToString
-    End Function
-
-    Public Overloads Function ToString(coord As Coord3d) As String
-        Dim str As New System.Text.StringBuilder
-        Dim P As Point3d = _point.ConvertTo(coord)
-        Dim normal As Vector3d = _normal.ConvertTo(coord)
+        If coord IsNot Nothing Then
+            P = _point.ConvertTo(coord)
+            normal = _normal.ConvertTo(coord)
+        End If
         str.Append("Plane3d:" + vbCrLf)
         str.Append(String.Format("Point  -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", P.X, P.Y, P.Z) + vbCrLf)
         str.Append(String.Format("Normal -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", normal.X, normal.Y, normal.Z))

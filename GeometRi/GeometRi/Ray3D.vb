@@ -51,56 +51,6 @@ Public Class Ray3d
 
 
     ''' <summary>
-    ''' Translate ray by a vector
-    ''' </summary>
-    Public Function Translate(v As Vector3d) As Ray3d
-        Dim l As Ray3d = Me.Clone
-        l.Point = l.Point.Translate(v)
-        Return l
-    End Function
-
-    ''' <summary>
-    ''' Rotate ray by a given rotation matrix
-    ''' </summary>
-    Public Function Rotate(ByVal m As Matrix3d) As Ray3d
-        Dim l As Ray3d = Me.Clone
-        l.Point = l.Point.Rotate(m)
-        l.Direction = l.Direction.Rotate(m)
-        Return l
-    End Function
-
-    ''' <summary>
-    ''' Rotate ray by a given rotation matrix around point 'p' as a rotation center
-    ''' </summary>
-    Public Function Rotate(m As Matrix3d, p As Point3d) As Ray3d
-        Dim l As Ray3d = Me.Clone
-        l.Point = l.Point.Rotate(m, p)
-        l.Direction = l.Direction.Rotate(m)
-        Return l
-    End Function
-
-    ''' <summary>
-    ''' Reflect ray in given point
-    ''' </summary>
-    Public Function ReflectIn(p As Point3d) As Ray3d
-        Return New Ray3d(Me.Point.ReflectIn(p), Me.Direction.ReflectIn(p))
-    End Function
-
-    ''' <summary>
-    ''' Reflect ray in given line
-    ''' </summary>
-    Public Function ReflectIn(l As Line3d) As Ray3d
-        Return New Ray3d(Me.Point.ReflectIn(l), Me.Direction.ReflectIn(l))
-    End Function
-
-    ''' <summary>
-    ''' Reflect ray in given plane
-    ''' </summary>
-    Public Function ReflectIn(s As Plane3d) As Ray3d
-        Return New Ray3d(Me.Point.ReflectIn(s), Me.Direction.ReflectIn(s))
-    End Function
-
-    ''' <summary>
     ''' Shortest distance to a line
     ''' </summary>
     Public Function DistanceTo(l As Line3d) As Double
@@ -205,6 +155,58 @@ Public Class Ray3d
         Return AngleTo(s) * 180 / PI
     End Function
 
+#Region "TranslateRotateReflect"
+    ''' <summary>
+    ''' Translate ray by a vector
+    ''' </summary>
+    Public Function Translate(v As Vector3d) As Ray3d
+        Dim l As Ray3d = Me.Clone
+        l.Point = l.Point.Translate(v)
+        Return l
+    End Function
+
+    ''' <summary>
+    ''' Rotate ray by a given rotation matrix
+    ''' </summary>
+    Public Function Rotate(ByVal m As Matrix3d) As Ray3d
+        Dim l As Ray3d = Me.Clone
+        l.Point = l.Point.Rotate(m)
+        l.Direction = l.Direction.Rotate(m)
+        Return l
+    End Function
+
+    ''' <summary>
+    ''' Rotate ray by a given rotation matrix around point 'p' as a rotation center
+    ''' </summary>
+    Public Function Rotate(m As Matrix3d, p As Point3d) As Ray3d
+        Dim l As Ray3d = Me.Clone
+        l.Point = l.Point.Rotate(m, p)
+        l.Direction = l.Direction.Rotate(m)
+        Return l
+    End Function
+
+    ''' <summary>
+    ''' Reflect ray in given point
+    ''' </summary>
+    Public Function ReflectIn(p As Point3d) As Ray3d
+        Return New Ray3d(Me.Point.ReflectIn(p), Me.Direction.ReflectIn(p))
+    End Function
+
+    ''' <summary>
+    ''' Reflect ray in given line
+    ''' </summary>
+    Public Function ReflectIn(l As Line3d) As Ray3d
+        Return New Ray3d(Me.Point.ReflectIn(l), Me.Direction.ReflectIn(l))
+    End Function
+
+    ''' <summary>
+    ''' Reflect ray in given plane
+    ''' </summary>
+    Public Function ReflectIn(s As Plane3d) As Ray3d
+        Return New Ray3d(Me.Point.ReflectIn(s), Me.Direction.ReflectIn(s))
+    End Function
+#End Region
+
     Public Overloads Overrides Function Equals(obj As Object) As Boolean
         If obj Is Nothing OrElse Not Me.GetType() Is obj.GetType() Then
             Return False
@@ -213,20 +215,14 @@ Public Class Ray3d
         Return Me.Point = r.Point AndAlso Abs(Me.Direction.Normalized * r.Direction.Normalized - 1) < GeometRi3D.Tolerance
     End Function
 
-    Public Overrides Function ToString() As String
+    Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
         Dim str As New System.Text.StringBuilder
         Dim P As Point3d = _point.ConvertToGlobal
         Dim dir As Vector3d = _dir.ConvertToGlobal
-        str.Append("Ray:" + vbCrLf)
-        str.Append(String.Format("Point  -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", P.X, P.Y, P.Z) + vbCrLf)
-        str.Append(String.Format("Direction -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", dir.X, dir.Y, dir.Z))
-        Return str.ToString
-    End Function
-
-    Public Overloads Function ToString(coord As Coord3d) As String
-        Dim str As New System.Text.StringBuilder
-        Dim P As Point3d = _point.ConvertTo(coord)
-        Dim dir As Vector3d = _dir.ConvertTo(coord)
+        If coord IsNot Nothing Then
+            P = _point.ConvertTo(coord)
+            dir = _dir.ConvertTo(coord)
+        End If
         str.Append("Ray:" + vbCrLf)
         str.Append(String.Format("Point  -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", P.X, P.Y, P.Z) + vbCrLf)
         str.Append(String.Format("Direction -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", dir.X, dir.Y, dir.Z))

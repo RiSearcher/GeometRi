@@ -1,52 +1,13 @@
 ﻿Imports System.Math
 
 Public Class Coord3d
-    Inherits GeometRi3D
     Implements ICloneable
 
     Private _origin As Point3d
     Private _axes As Matrix3d
-    Public _name As String
+    Private _name As String
     Private Shared count As Integer = 0
     Public Shared ReadOnly GlobalCS As Coord3d = New Coord3d("Global_CS")
-
-    ''' <summary>
-    ''' Get or Set the origin of the coordinate system
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property Origin As Point3d
-        Get
-            'Return _origin
-            Return New Point3d(_origin.X, _origin.Y, _origin.Z)
-        End Get
-        Set(value As Point3d)
-            _origin = value.ConvertToGlobal
-        End Set
-    End Property
-    ''' <summary>
-    ''' Get or Set unit vectors of the axes, stored as row-matrix(3x3)
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property Axes As Matrix3d
-        Get
-            Return _axes.Clone
-        End Get
-        Set(value As Matrix3d)
-            If value.IsOrthogonal Then
-                _axes = value.Clone
-            Else
-                Throw New ArgumentException("The matrix is not orthogonal")
-            End If
-        End Set
-    End Property
-    ''' <summary>
-    ''' Get total number of coordinate systems
-    ''' </summary>
-    Public Shared ReadOnly Property Counts As Integer
-        Get
-            Return count
-        End Get
-    End Property
 
 
 #Region "Constructors"
@@ -141,7 +102,6 @@ Public Class Coord3d
     End Sub
 #End Region
 
-
     Public Function Clone() As Object Implements ICloneable.Clone
         Dim newobj As Coord3d = DirectCast(MemberwiseClone(), Coord3d)
         newobj.Origin = newobj.Origin.Clone
@@ -150,6 +110,53 @@ Public Class Coord3d
         count += 1
         Return newobj
     End Function
+
+
+    ''' <summary>
+    ''' Get or Set the origin of the coordinate system
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property Origin As Point3d
+        Get
+            'Return _origin
+            Return New Point3d(_origin.X, _origin.Y, _origin.Z)
+        End Get
+        Set(value As Point3d)
+            _origin = value.ConvertToGlobal
+        End Set
+    End Property
+    ''' <summary>
+    ''' Get or Set unit vectors of the axes, stored as row-matrix(3x3)
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property Axes As Matrix3d
+        Get
+            Return _axes.Clone
+        End Get
+        Set(value As Matrix3d)
+            If value.IsOrthogonal Then
+                _axes = value.Clone
+            Else
+                Throw New ArgumentException("The matrix is not orthogonal")
+            End If
+        End Set
+    End Property
+
+    Public ReadOnly Property Name As String
+        Get
+            Return _name
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Get total number of coordinate systems
+    ''' </summary>
+    Public Shared ReadOnly Property Counts As Integer
+        Get
+            Return count
+        End Get
+    End Property
+
 
     ''' <summary>
     ''' Get X-axis

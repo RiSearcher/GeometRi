@@ -776,7 +776,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim l1 As Line3d = New Line3d(New Point3d(2, 3, 4, coord1), New Vector3d(2, 1, -3))
         Dim l2 As Line3d = New Line3d(New Point3d(2, 3, 4, coord2), New Vector3d(2, 1, -3))
         Dim lt As Line3d = l1.ReflectIn(l2)
-        'lt.Point = lt.Point.ConvertTo(coord2)
+        lt.Point = lt.Point.ConvertTo(coord2)
 
         Assert.IsTrue(lt.ReflectIn(l2) = l1)
     End Sub

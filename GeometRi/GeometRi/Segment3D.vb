@@ -62,49 +62,6 @@ Public Class Segment3d
     End Property
 
     ''' <summary>
-    ''' Translate segment by a vector
-    ''' </summary>
-    Public Function Translate(v As Vector3d) As Segment3d
-        Return New Segment3d(P1.Translate(v), P2.Translate(v))
-    End Function
-
-    ''' <summary>
-    ''' Rotate segment by a given rotation matrix
-    ''' </summary>
-    Public Overridable Function Rotate(ByVal m As Matrix3d) As Segment3d
-        Return New Segment3d(P1.Rotate(m), P2.Rotate(m))
-    End Function
-
-    ''' <summary>
-    ''' Rotate segment by a given rotation matrix around point 'p' as a rotation center
-    ''' </summary>
-    Public Overridable Function Rotate(m As Matrix3d, p As Point3d) As Segment3d
-        Return New Segment3d(P1.Rotate(m, p), P2.Rotate(m, p))
-    End Function
-
-    ''' <summary>
-    ''' Reflect segment in given point
-    ''' </summary>
-    Public Overridable Function ReflectIn(p As Point3d) As Segment3d
-        Return New Segment3d(P1.ReflectIn(p), P2.ReflectIn(p))
-    End Function
-
-    ''' <summary>
-    ''' Reflect segment in given line
-    ''' </summary>
-    Public Overridable Function ReflectIn(l As Line3d) As Segment3d
-        Return New Segment3d(P1.ReflectIn(l), P2.ReflectIn(l))
-    End Function
-
-    ''' <summary>
-    ''' Reflect segment in given plane
-    ''' </summary>
-    Public Overridable Function ReflectIn(s As Plane3d) As Segment3d
-        Return New Segment3d(P1.ReflectIn(s), P2.ReflectIn(s))
-    End Function
-
-
-    ''' <summary>
     ''' Get the orthogonal projection of a segment to the line.
     ''' Return object of type 'Segment3d' or 'Point3d'
     ''' </summary>
@@ -149,6 +106,49 @@ Public Class Segment3d
         Return AngleTo(s) * 180 / PI
     End Function
 
+#Region "TranslateRotateReflect"
+    ''' <summary>
+    ''' Translate segment by a vector
+    ''' </summary>
+    Public Function Translate(v As Vector3d) As Segment3d
+        Return New Segment3d(P1.Translate(v), P2.Translate(v))
+    End Function
+
+    ''' <summary>
+    ''' Rotate segment by a given rotation matrix
+    ''' </summary>
+    Public Overridable Function Rotate(ByVal m As Matrix3d) As Segment3d
+        Return New Segment3d(P1.Rotate(m), P2.Rotate(m))
+    End Function
+
+    ''' <summary>
+    ''' Rotate segment by a given rotation matrix around point 'p' as a rotation center
+    ''' </summary>
+    Public Overridable Function Rotate(m As Matrix3d, p As Point3d) As Segment3d
+        Return New Segment3d(P1.Rotate(m, p), P2.Rotate(m, p))
+    End Function
+
+    ''' <summary>
+    ''' Reflect segment in given point
+    ''' </summary>
+    Public Overridable Function ReflectIn(p As Point3d) As Segment3d
+        Return New Segment3d(P1.ReflectIn(p), P2.ReflectIn(p))
+    End Function
+
+    ''' <summary>
+    ''' Reflect segment in given line
+    ''' </summary>
+    Public Overridable Function ReflectIn(l As Line3d) As Segment3d
+        Return New Segment3d(P1.ReflectIn(l), P2.ReflectIn(l))
+    End Function
+
+    ''' <summary>
+    ''' Reflect segment in given plane
+    ''' </summary>
+    Public Overridable Function ReflectIn(s As Plane3d) As Segment3d
+        Return New Segment3d(P1.ReflectIn(s), P2.ReflectIn(s))
+    End Function
+#End Region
 
     Public Overloads Overrides Function Equals(obj As Object) As Boolean
         If obj Is Nothing OrElse Not Me.GetType() Is obj.GetType() Then
@@ -158,20 +158,14 @@ Public Class Segment3d
         Return (Me.P1 = s.P1 AndAlso Me.P2 = s.P2) Or (Me.P1 = s.P2 AndAlso Me.P2 = s.P1)
     End Function
 
-    Public Overrides Function ToString() As String
+    Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
         Dim str As New System.Text.StringBuilder
         Dim p1 As Point3d = _p1.ConvertToGlobal
         Dim p2 As Point3d = _p2.ConvertToGlobal
-        str.Append("Segment:" + vbCrLf)
-        str.Append(String.Format("Point 1  -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", p1.X, p1.Y, p1.Z) + vbCrLf)
-        str.Append(String.Format("Point 2 -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", p2.X, p2.Y, p2.Z))
-        Return str.ToString
-    End Function
-
-    Public Overloads Function ToString(coord As Coord3d) As String
-        Dim str As New System.Text.StringBuilder
-        Dim p1 As Point3d = _p1.ConvertTo(coord)
-        Dim p2 As Point3d = _p2.ConvertTo(coord)
+        If coord IsNot Nothing Then
+            p1 = _p1.ConvertTo(coord)
+            p2 = _p2.ConvertTo(coord)
+        End If
         str.Append("Segment:" + vbCrLf)
         str.Append(String.Format("Point 1  -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", p1.X, p1.Y, p1.Z) + vbCrLf)
         str.Append(String.Format("Point 2 -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", p2.X, p2.Y, p2.Z))

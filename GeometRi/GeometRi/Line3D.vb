@@ -7,14 +7,26 @@ Public Class Line3d
     Private _point As Point3d
     Private _dir As Vector3d
 
+#Region "Constructors"
+    ''' <summary>
+    ''' Create default line.
+    ''' </summary>
     Public Sub New()
         _point = New Point3d()
         _dir = New Vector3d(1, 0, 0)
     End Sub
+
+    ''' <summary>
+    ''' Create line by point and dirction.
+    ''' </summary>
+    ''' <param name="p">Point on the line.</param>
+    ''' <param name="v">Direction vector.</param>
     Public Sub New(ByVal p As Point3d, ByVal v As Vector3d)
         _point = p.Clone
         _dir = v.Clone
     End Sub
+#End Region
+
 
     Public Function Clone() As Object Implements ICloneable.Clone
         Dim newobj As Line3d = DirectCast(MemberwiseClone(), Line3d)
@@ -141,6 +153,7 @@ Public Class Line3d
         Return AngleTo(s) * 180 / PI
     End Function
 
+#Region "TranslateRotateReflect"
     ''' <summary>
     ''' Translate line by a vector
     ''' </summary>
@@ -190,6 +203,7 @@ Public Class Line3d
     Public Overridable Function ReflectIn(s As Plane3d) As Line3d
         Return New Line3d(Me.Point.ReflectIn(s), Me.Direction.ReflectIn(s))
     End Function
+#End Region
 
     Public Overloads Overrides Function Equals(obj As Object) As Boolean
         If obj Is Nothing OrElse Not Me.GetType() Is obj.GetType() Then
@@ -199,20 +213,14 @@ Public Class Line3d
         Return Me.Point.BelongsTo(l) AndAlso Me.Direction.IsParallelTo(l.Direction)
     End Function
 
-    Public Overrides Function ToString() As String
+    Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
         Dim str As New System.Text.StringBuilder
         Dim P As Point3d = _point.ConvertToGlobal
         Dim dir As Vector3d = _dir.ConvertToGlobal
-        str.Append("Line:" + vbCrLf)
-        str.Append(String.Format("Point  -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", P.X, P.Y, P.Z) + vbCrLf)
-        str.Append(String.Format("Direction -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", dir.X, dir.Y, dir.Z))
-        Return str.ToString
-    End Function
-
-    Public Overloads Function ToString(coord As Coord3d) As String
-        Dim str As New System.Text.StringBuilder
-        Dim P As Point3d = _point.ConvertTo(coord)
-        Dim dir As Vector3d = _dir.ConvertTo(coord)
+        If coord IsNot Nothing Then
+            P = _point.ConvertTo(coord)
+            dir = _dir.ConvertTo(coord)
+        End If
         str.Append("Line:" + vbCrLf)
         str.Append(String.Format("Point  -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", P.X, P.Y, P.Z) + vbCrLf)
         str.Append(String.Format("Direction -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", dir.X, dir.Y, dir.Z))

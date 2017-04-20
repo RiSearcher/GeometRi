@@ -24,7 +24,7 @@
     End Property
     Public ReadOnly Property CoordName As String
         Get
-            CoordName = _coord._name
+            CoordName = _coord.Name
         End Get
     End Property
 

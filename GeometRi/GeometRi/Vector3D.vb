@@ -6,6 +6,7 @@ Public Class Vector3d
 
     Public val(2) As Double
 
+#Region "Constructors"
     Public Sub New(Optional coord As Coord3d = Nothing)
         Me.val(0) = 0.0
         Me.val(1) = 0.0
@@ -50,6 +51,8 @@ Public Class Vector3d
             _coord = Coord3d.GlobalCS
         End If
     End Sub
+#End Region
+
 
 
     Public Function Clone() As Object Implements ICloneable.Clone
@@ -272,6 +275,7 @@ Public Class Vector3d
         Return (Me * v) / (v * v) * v
     End Function
 
+#Region "RotateReflect"
     ''' <summary>
     ''' Rotate vector by a given rotation matrix
     ''' </summary>
@@ -303,6 +307,7 @@ Public Class Vector3d
         Dim p2 As Point3d = p1.Translate(Me)
         Return New Vector3d(p1.ReflectIn(s), p2.ReflectIn(s))
     End Function
+#End Region
 
     Public Overloads Overrides Function Equals(obj As Object) As Boolean
         If obj Is Nothing OrElse Not Me.GetType() Is obj.GetType() Then
@@ -313,13 +318,11 @@ Public Class Vector3d
         Return Abs(Me.X - v.X) < Tolerance AndAlso Abs(Me.Y - v.Y) < Tolerance AndAlso Abs(Me.Y - v.Y) < Tolerance
     End Function
 
-    Public Overrides Function ToString() As String
-        Dim v As Vector3d = Me.ConvertTo(Coord3d.GlobalCS)
-        Return String.Format("Vector3d -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", v.X, v.Y, v.Z)
-    End Function
-
-    Public Overloads Function ToString(coord As Coord3d) As String
-        Dim v As Vector3d = Me.ConvertTo(coord)
+    Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
+        Dim v As Vector3d = Me.ConvertToGlobal
+        If coord IsNot Nothing Then
+            v = Me.ConvertTo(coord)
+        End If
         Return String.Format("Vector3d -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", v.X, v.Y, v.Z)
     End Function
 

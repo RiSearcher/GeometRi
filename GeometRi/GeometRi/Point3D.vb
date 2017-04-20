@@ -6,6 +6,45 @@ Public Class Point3d
 
     Private _x, _y, _z As Double
 
+#Region "Constructors"
+    Public Sub New(Optional coord As Coord3d = Nothing)
+        _x = 0.0
+        _y = 0.0
+        _z = 0.0
+        If coord IsNot Nothing Then
+            _coord = coord
+        Else
+            _coord = Coord3d.GlobalCS
+        End If
+    End Sub
+    Public Sub New(ByVal x As Double, ByVal y As Double, ByVal z As Double, Optional coord As Coord3d = Nothing)
+        _x = x
+        _y = y
+        _z = z
+        If coord IsNot Nothing Then
+            _coord = coord
+        Else
+            _coord = Coord3d.GlobalCS
+        End If
+    End Sub
+
+    Public Sub New(ByVal a As Double(), Optional coord As Coord3d = Nothing)
+        If a.GetUpperBound(0) < 2 Then Throw New Exception("Point3d: Array size mismatch")
+        _x = a(0)
+        _y = a(1)
+        _z = a(2)
+        If coord IsNot Nothing Then
+            _coord = coord
+        Else
+            _coord = Coord3d.GlobalCS
+        End If
+    End Sub
+#End Region
+
+    Public Function Clone() As Object Implements ICloneable.Clone
+        Return DirectCast(MemberwiseClone(), Point3d)
+    End Function
+
     Public Property X As Double
         Get
             Return _x
@@ -31,84 +70,11 @@ Public Class Point3d
         End Set
     End Property
 
-    Public Sub New(Optional coord As Coord3d = Nothing)
-        _x = 0.0
-        _y = 0.0
-        _z = 0.0
-        If coord IsNot Nothing Then
-            _coord = coord
-        Else
-            _coord = Coord3d.GlobalCS
-        End If
-    End Sub
-    Public Sub New(ByVal x As Double, ByVal y As Double, ByVal z As Double, Optional coord As Coord3d = Nothing)
-        _x = x
-        _y = y
-        _z = z
-        If coord IsNot Nothing Then
-            _coord = coord
-        Else
-            _coord = Coord3d.GlobalCS
-        End If
-    End Sub
-
-    Public Function Clone() As Object Implements ICloneable.Clone
-        Return DirectCast(MemberwiseClone(), Point3d)
-    End Function
-
     Public ReadOnly Property ToVector As Vector3d
         Get
             Return New Vector3d(Me)
         End Get
     End Property
-
-    ''' <summary>
-    ''' Translate point by a vector
-    ''' </summary>
-    Public Function Translate(ByVal v As Vector3d) As Point3d
-        If (Me._coord <> v.Coord) Then v = v.ConvertTo(Me._coord)
-        Return Me + v.ToPoint
-    End Function
-
-    ''' <summary>
-    ''' Rotate point by a given rotation matrix
-    ''' </summary>
-    Public Function Rotate(ByVal m As Matrix3d) As Point3d
-        Return m * Me
-    End Function
-
-    ''' <summary>
-    ''' Rotate point by a given rotation matrix around point 'p' as a rotation center
-    ''' </summary>
-    Public Function Rotate(m As Matrix3d, p As Point3d) As Point3d
-        If (Me._coord <> p.Coord) Then p = p.ConvertTo(Me._coord)
-        Return m * (Me - p) + p
-    End Function
-
-    ''' <summary>
-    ''' Reflect point in given point
-    ''' </summary>
-    Public Function ReflectIn(p As Point3d) As Point3d
-        If (Me._coord <> p.Coord) Then p = p.ConvertTo(Me._coord)
-        Dim v As Vector3d = New Vector3d(Me, p)
-        Return Me.Translate(2 * v)
-    End Function
-
-    ''' <summary>
-    ''' Reflect point in given line
-    ''' </summary>
-    Public Function ReflectIn(l As Line3d) As Point3d
-        Dim v As Vector3d = New Vector3d(Me, Me.ProjectionTo(l))
-        Return Me.Translate(2 * v)
-    End Function
-
-    ''' <summary>
-    ''' Reflect point in given plane
-    ''' </summary>
-    Public Function ReflectIn(s As Plane3d) As Point3d
-        Dim v As Vector3d = New Vector3d(Me, Me.ProjectionTo(s))
-        Return Me.Translate(2 * v)
-    End Function
 
     ''' <summary>
     ''' Convert point to local coordinate system
@@ -276,6 +242,56 @@ Public Class Point3d
         Return Abs(s.A * X + s.B * Y + s.C * Z + s.D) < Tolerance
     End Function
 
+#Region "TranslateRotateReflect"
+    ''' <summary>
+    ''' Translate point by a vector
+    ''' </summary>
+    Public Function Translate(ByVal v As Vector3d) As Point3d
+        If (Me._coord <> v.Coord) Then v = v.ConvertTo(Me._coord)
+        Return Me + v.ToPoint
+    End Function
+
+    ''' <summary>
+    ''' Rotate point by a given rotation matrix
+    ''' </summary>
+    Public Function Rotate(ByVal m As Matrix3d) As Point3d
+        Return m * Me
+    End Function
+
+    ''' <summary>
+    ''' Rotate point by a given rotation matrix around point 'p' as a rotation center
+    ''' </summary>
+    Public Function Rotate(m As Matrix3d, p As Point3d) As Point3d
+        If (Me._coord <> p.Coord) Then p = p.ConvertTo(Me._coord)
+        Return m * (Me - p) + p
+    End Function
+
+    ''' <summary>
+    ''' Reflect point in given point
+    ''' </summary>
+    Public Function ReflectIn(p As Point3d) As Point3d
+        If (Me._coord <> p.Coord) Then p = p.ConvertTo(Me._coord)
+        Dim v As Vector3d = New Vector3d(Me, p)
+        Return Me.Translate(2 * v)
+    End Function
+
+    ''' <summary>
+    ''' Reflect point in given line
+    ''' </summary>
+    Public Function ReflectIn(l As Line3d) As Point3d
+        Dim v As Vector3d = New Vector3d(Me, Me.ProjectionTo(l))
+        Return Me.Translate(2 * v)
+    End Function
+
+    ''' <summary>
+    ''' Reflect point in given plane
+    ''' </summary>
+    Public Function ReflectIn(s As Plane3d) As Point3d
+        Dim v As Vector3d = New Vector3d(Me, Me.ProjectionTo(s))
+        Return Me.Translate(2 * v)
+    End Function
+#End Region
+
     Public Overloads Overrides Function Equals(obj As Object) As Boolean
         If obj Is Nothing OrElse Not Me.GetType() Is obj.GetType() Then
             Return False
@@ -285,14 +301,11 @@ Public Class Point3d
         Return Me.DistanceTo(p) < Tolerance
     End Function
 
-    Public Overrides Function ToString() As String
-        Dim p As Point3d = Me.ConvertTo(Coord3d.GlobalCS)
-        Dim str As String = String.Format("Point3d -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", p.X, p.Y, p.Z) + vbCrLf
-        Return str
-    End Function
-
-    Public Overloads Function ToString(coord As Coord3d) As String
-        Dim p As Point3d = Me.ConvertTo(coord)
+    Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
+        Dim p As Point3d = Me.ConvertToGlobal
+        If coord IsNot Nothing Then
+            p = Me.ConvertTo(coord)
+        End If
         Dim str As String = String.Format("Point3d -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", p.X, p.Y, p.Z) + vbCrLf
         Return str
     End Function
