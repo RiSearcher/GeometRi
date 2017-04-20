@@ -46,6 +46,11 @@ Module Module1
             End If
         End If
 
+        ' Short variant
+        ' Will cause "InvalidCastException" if the intersection is not a point
+        Dim p3 As Point3d = CType(l1.IntersectionWith(s1), Point3d)
+        Console.WriteLine(p3.ToString())
+
 
         Console.ReadLine()
 
