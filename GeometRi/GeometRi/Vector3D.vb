@@ -212,8 +212,10 @@ Public Class Vector3d
         Return tmp
     End Function
 
+    ''' <summary>
+    ''' Convert vector to local coordinate system.
+    ''' </summary>
     Public Function ConvertTo(ByVal coord As Coord3d) As Vector3d
-        ' Convert vector to local coordinate system
         Dim v1 As Vector3d = Me.Clone
         v1 = v1.ConvertToGlobal()
         If coord IsNot Nothing AndAlso coord IsNot Coord3d.GlobalCS Then
@@ -222,8 +224,11 @@ Public Class Vector3d
         End If
         Return v1
     End Function
+
+    ''' <summary>
+    ''' Convert vector to global coordinate system
+    ''' </summary>
     Public Function ConvertToGlobal() As Vector3d
-        ' Convert point from local coordinate system '_coord' to global system
         If _coord Is Nothing OrElse _coord Is Coord3d.GlobalCS Then
             Return Me
         Else
@@ -234,6 +239,7 @@ Public Class Vector3d
         End If
     End Function
 
+#Region "AngleTo"
     ''' <summary>
     ''' Angle between two vectors in radians (0 &lt; angle &lt; Pi)
     ''' </summary>
@@ -244,28 +250,73 @@ Public Class Vector3d
     ''' <summary>
     ''' Angle between two vectors in degrees (0 &lt; angle &lt; 180)
     ''' </summary>
-    Public Function AngleDegTo(v As Vector3d) As Double
+    Public Function AngleToDeg(v As Vector3d) As Double
         Return AngleTo(v) * 180 / PI
     End Function
 
     ''' <summary>
-    ''' Angle between vector and plane in radians (0 &lt; angle &lt; Pi/2)
+    ''' Angle between vector and ray in radians (0 &lt; angle &lt; Pi)
+    ''' </summary>
+    Public Function AngleTo(r As Ray3d) As Double
+        Return Me.AngleTo(r.Direction)
+    End Function
+    ''' <summary>
+    ''' Angle between vector and ray in degrees (0 &lt; angle &lt; 180)
+    ''' </summary>
+    Public Function AngleToDeg(r As Ray3d) As Double
+        Return Me.AngleTo(r.Direction) * 180 / PI
+    End Function
+
+    ''' <summary>
+    ''' Smalest angle between vector and line in radians (0 &lt; angle &lt; Pi/2)
+    ''' </summary>
+    Public Function AngleTo(l As Line3d) As Double
+        Dim ang As Double = Me.AngleTo(l.Direction)
+        If ang <= PI / 2 Then
+            Return ang
+        Else
+            Return PI - ang
+        End If
+    End Function
+    ''' <summary>
+    ''' Smalest angle between vector and line in degrees (0 &lt; angle &lt; 90)
+    ''' </summary>
+    Public Function AngleToDeg(l As Line3d) As Double
+        Return AngleTo(l) * 180 / PI
+    End Function
+
+    ''' <summary>
+    ''' Smalest angle between vector and segment in radians (0 &lt; angle &lt; Pi/2)
+    ''' </summary>
+    Public Function AngleTo(s As Segment3d) As Double
+        Dim ang As Double = Me.AngleTo(s.ToVector)
+        If ang <= PI / 2 Then
+            Return ang
+        Else
+            Return PI - ang
+        End If
+    End Function
+    ''' <summary>
+    ''' Smalest angle between vector and segment in degrees (0 &lt; angle &lt; 90)
+    ''' </summary>
+    Public Function AngleToDeg(s As Segment3d) As Double
+        Return AngleTo(s) * 180 / PI
+    End Function
+
+    ''' <summary>
+    ''' Smalest angle between vector and plane in radians (0 &lt; angle &lt; Pi/2)
     ''' </summary>
     Public Function AngleTo(s As Plane3d) As Double
         Dim ang As Double = Asin(Me.Dot(s.Normal) / Me.Norm / s.Normal.Norm)
         Return Abs(ang)
-        'If ang <= PI / 2 Then
-        '    Return ang
-        'Else
-        '    Return PI - ang
-        'End If
     End Function
     ''' <summary>
-    ''' Angle between vector and plane in degrees (0 &lt; angle &lt; 90)
+    ''' Smalest angle between vector and plane in degrees (0 &lt; angle &lt; 90)
     ''' </summary>
-    Public Function AngleDegTo(s As Plane3d) As Double
+    Public Function AngleToDeg(s As Plane3d) As Double
         Return AngleTo(s) * 180 / PI
     End Function
+#End Region
 
     ''' <summary>
     ''' Returns projection of the current vector to the second vector

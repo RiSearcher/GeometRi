@@ -211,7 +211,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim s As Plane3d = New Plane3d(0, 0, 1, -1)
         Dim r1 As Segment3d = New Segment3d(New Point3d(0, 0, 3), New Point3d(1, 0, 4))
         Dim r2 As Segment3d = New Segment3d(New Point3d(0, 0, -3), New Point3d(1, 0, -4))
-        Assert.IsTrue(Abs(r1.AngleDegTo(s) - 45) < GeometRi3D.Tolerance AndAlso Abs(r1.AngleTo(s) - r2.AngleTo(s)) < GeometRi3D.Tolerance)
+        Assert.IsTrue(Abs(r1.AngleToDeg(s) - 45) < GeometRi3D.Tolerance AndAlso Abs(r1.AngleTo(s) - r2.AngleTo(s)) < GeometRi3D.Tolerance)
     End Sub
 
     <TestMethod()> Public Sub SegmentEqualsTest()
@@ -367,7 +367,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         v1 = m * v1
         Dim s2 As Plane3d = New Plane3d(p1, v1)
 
-        Assert.IsTrue(Abs(s1.AngleDegTo(s2) - 10) < GeometRi3D.Tolerance)
+        Assert.IsTrue(Abs(s1.AngleToDeg(s2) - 10) < GeometRi3D.Tolerance)
     End Sub
 
     <TestMethod()> Public Sub PlaneAngleToPlaneTest2()
@@ -379,7 +379,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         v1 = m * v1
         Dim s2 As Plane3d = New Plane3d(p1, -v1)
 
-        Assert.IsTrue(Abs(s1.AngleDegTo(s2) - 10) < GeometRi3D.Tolerance)
+        Assert.IsTrue(Abs(s1.AngleToDeg(s2) - 10) < GeometRi3D.Tolerance)
     End Sub
 
     '===============================================================
@@ -390,14 +390,39 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         ' Angle < 90 
         Dim v1 As Vector3d = New Vector3d(1, 0, 0)
         Dim v2 As Vector3d = New Vector3d(1, 1, 0)
-        Assert.IsTrue(Abs(v1.AngleDegTo(v2) - 45) < GeometRi3D.Tolerance)
+        Assert.IsTrue(Abs(v1.AngleToDeg(v2) - 45) < GeometRi3D.Tolerance)
     End Sub
 
     <TestMethod()> Public Sub VectorAngleTest2()
         ' Angle > 90 
         Dim v1 As Vector3d = New Vector3d(1, 0, 0)
         Dim v2 As Vector3d = New Vector3d(-1, 1, 0)
-        Assert.IsTrue(Abs(v1.AngleDegTo(v2) - 135) < GeometRi3D.Tolerance)
+        Assert.IsTrue(Abs(v1.AngleToDeg(v2) - 135) < GeometRi3D.Tolerance)
+    End Sub
+
+    <TestMethod()> Public Sub VectorAngleToPlaneTest()
+        Dim s As New Plane3d() ' XY plane
+
+        Dim v As Vector3d = New Vector3d(1, 0, 0)
+        Assert.IsTrue(Abs(v.AngleTo(s)) < GeometRi3D.Tolerance)
+        Assert.IsTrue(Abs(s.AngleTo(v)) < GeometRi3D.Tolerance)
+
+        v = New Vector3d(0, 0, 1)
+        Assert.IsTrue(Abs(v.AngleTo(s) - PI / 2) < GeometRi3D.Tolerance)
+        Assert.IsTrue(Abs(s.AngleTo(v) - PI / 2) < GeometRi3D.Tolerance)
+
+        v = New Vector3d(0, 0, -1)
+        Assert.IsTrue(Abs(v.AngleTo(s) - PI / 2) < GeometRi3D.Tolerance)
+        Assert.IsTrue(Abs(s.AngleTo(v) - PI / 2) < GeometRi3D.Tolerance)
+
+        v = New Vector3d(1, 0, 1)
+        Assert.IsTrue(Abs(v.AngleTo(s) - PI / 4) < GeometRi3D.Tolerance)
+        Assert.IsTrue(Abs(s.AngleTo(v) - PI / 4) < GeometRi3D.Tolerance)
+
+        v = New Vector3d(1, 0, -1)
+        Assert.IsTrue(Abs(v.AngleTo(s) - PI / 4) < GeometRi3D.Tolerance)
+        Assert.IsTrue(Abs(s.AngleTo(v) - PI / 4) < GeometRi3D.Tolerance)
+
     End Sub
 
     '===============================================================

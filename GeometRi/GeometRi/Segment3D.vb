@@ -87,24 +87,22 @@ Public Class Segment3d
         End If
     End Function
 
+#Region "AngleTo"
     ''' <summary>
     ''' Angle between segment and plane in radians (0 &lt; angle &lt; Pi/2)
     ''' </summary>
     Public Function AngleTo(s As Plane3d) As Double
         Dim ang As Double = Asin(Me.ToVector.Dot(s.Normal) / Me.ToVector.Norm / s.Normal.Norm)
         Return Abs(ang)
-        'If ang <= PI / 2 Then
-        '    Return ang
-        'Else
-        '    Return PI - ang
-        'End If
     End Function
     ''' <summary>
     ''' Angle between segment and plane in degrees (0 &lt; angle &lt; 90)
     ''' </summary>
-    Public Function AngleDegTo(s As Plane3d) As Double
+    Public Function AngleToDeg(s As Plane3d) As Double
         Return AngleTo(s) * 180 / PI
     End Function
+#End Region
+
 
 #Region "TranslateRotateReflect"
     ''' <summary>

@@ -14,7 +14,7 @@ Public Class Plane3d
     ''' </summary>
     Public Sub New()
         _point = New Point3d(0, 0, 0)
-        _normal = New Vector3d(1, 0, 0)
+        _normal = New Vector3d(0, 0, 1)
     End Sub
 
     ''' <summary>
@@ -233,6 +233,8 @@ Public Class Plane3d
         End If
     End Function
 
+
+#Region "AngleTo"
     ''' <summary>
     ''' Angle between vector and plane in radians (0 &lt; angle &lt; Pi/2)
     ''' </summary>
@@ -242,8 +244,8 @@ Public Class Plane3d
     ''' <summary>
     ''' Angle between vector and plane in degrees (0 &lt; angle &lt; 90)
     ''' </summary>
-    Public Function AngleDegTo(v As Vector3d) As Double
-        Return Abs(90.0 - Me.Normal.AngleDegTo(v))
+    Public Function AngleToDeg(v As Vector3d) As Double
+        Return Abs(90.0 - Me.Normal.AngleToDeg(v))
     End Function
 
     ''' <summary>
@@ -255,8 +257,8 @@ Public Class Plane3d
     ''' <summary>
     ''' Angle between line and plane in degrees (0 &lt; angle &lt; 90)
     ''' </summary>
-    Public Function AngleDegTo(l As Line3d) As Double
-        Return Abs(90.0 - Me.Normal.AngleDegTo(l.Direction))
+    Public Function AngleToDeg(l As Line3d) As Double
+        Return Abs(90.0 - Me.Normal.AngleToDeg(l.Direction))
     End Function
 
     ''' <summary>
@@ -273,9 +275,11 @@ Public Class Plane3d
     ''' <summary>
     ''' Angle between two planes in degrees (0 &lt; angle &lt; 90)
     ''' </summary>
-    Public Function AngleDegTo(s As Plane3d) As Double
+    Public Function AngleToDeg(s As Plane3d) As Double
         Return AngleTo(s) * 180 / PI
     End Function
+#End Region
+
 
 #Region "TranslateRotateReflect"
     ''' <summary>
