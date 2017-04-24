@@ -125,7 +125,8 @@ Public Class Ray3d
             r1 = r1 - ((r1 * n2) + s.D) / (s1 * n2) * s1
             If r1.ToPoint.BelongsTo(Me) Then
                 Return r1.ToPoint
-            Else Return Nothing
+            Else
+                Return Nothing
             End If
         End If
     End Function

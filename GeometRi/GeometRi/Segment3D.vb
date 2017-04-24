@@ -61,6 +61,65 @@ Public Class Segment3d
         End Get
     End Property
 
+#Region "DistanceTo"
+    ''' <summary>
+    ''' Returns shortest distance from segment to the point
+    ''' </summary>
+    Public Function DistanceTo(p As Point3d) As Double
+        Return p.DistanceTo(Me)
+    End Function
+
+    ''' <summary>
+    ''' Returns shortest distance from segment to the plane
+    ''' </summary>
+    Public Function DistanceTo(s As Plane3d) As Double
+
+        Dim obj As Object = Me.IntersectionWith(s)
+
+        If obj Is Nothing Then
+            Return Min(Me.P1.DistanceTo(s), Me.P2.DistanceTo(s))
+        Else
+            Return 0
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Returns shortest distance from segment to the line
+    ''' </summary>
+    Public Function DistanceTo(l As Line3d) As Double
+        If l.PerpendicularTo(Me.ToLine).BelongsTo(Me) Then
+            Return l.DistanceTo(Me.ToLine)
+        Else
+            Return Min(Me.P1.DistanceTo(l), Me.P2.DistanceTo(l))
+        End If
+    End Function
+#End Region
+
+    ''' <summary>
+    ''' Get intersection of segment with plane.
+    ''' Returns object of type 'Nothing', 'Point3d' or 'Segment3d'.
+    ''' </summary>
+    Public Function IntersectionWith(s As Plane3d) As Object
+
+        Dim obj As Object = Me.ToRay.IntersectionWith(s)
+
+        If obj Is Nothing Then
+            Return Nothing
+        Else
+            If obj.GetType Is GetType(Ray3d) Then
+                Return Me
+            Else
+                Dim r As New Ray3d(Me.P2, New Vector3d(Me.P2, Me.P1))
+                Dim obj2 As Object = r.IntersectionWith(s)
+                If obj2 Is Nothing Then
+                    Return Nothing
+                Else
+                    Return CType(obj2, Point3d)
+                End If
+            End If
+        End If
+    End Function
+
     ''' <summary>
     ''' Get the orthogonal projection of a segment to the line.
     ''' Return object of type 'Segment3d' or 'Point3d'

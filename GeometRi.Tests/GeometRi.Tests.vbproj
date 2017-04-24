@@ -49,8 +49,7 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GeometRi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="GeometRi">
       <HintPath>..\GeometRi\bin\Debug\GeometRi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
