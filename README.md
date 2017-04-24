@@ -25,7 +25,7 @@ Objects of type Point3d or Vector3d can be defined in global or in local coordin
 
 * __Coord3d__ and __Matrix3d__ are auxiliary classes.
 
-* __GeometRi3d is an abstract class, which defines some common functionality, for example global tolerance property (GeometRi3d.Tolerance)
+* __GeometRi3d__ is an abstract class, which defines some common functionality, for example global tolerance property (GeometRi3d.Tolerance)
 used in proximity operations by other classes.
 
 #### Some common methods

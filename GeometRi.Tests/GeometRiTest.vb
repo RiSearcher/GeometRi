@@ -41,6 +41,28 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.IsTrue(Abs(p1.DistanceTo(s1) - 3) < GeometRi3D.Tolerance)
     End Sub
 
+    <TestMethod()> Public Sub PointDistanceToRayTest()
+        Dim p As Point3d = New Point3d(0, 0, 0)
+        Dim r As Ray3d = New Ray3d(New Point3d(1, 1, 0), New Vector3d(1, 0, 0))
+        Assert.IsTrue(Abs(p.DistanceTo(r) - Sqrt(2)) < GeometRi3D.Tolerance)
+
+        p = New Point3d(2, 0, 0)
+        Assert.IsTrue(Abs(p.DistanceTo(r) - 1) < GeometRi3D.Tolerance)
+    End Sub
+
+    <TestMethod()> Public Sub PointDistanceToSegmentTest()
+        Dim p As Point3d = New Point3d(0, 0, 0)
+        Dim s As Segment3d = New Segment3d(New Point3d(1, 1, 0), New Point3d(3, 3, 0))
+        Assert.IsTrue(Abs(p.DistanceTo(s) - Sqrt(2)) < GeometRi3D.Tolerance)
+
+        p = New Point3d(1, 1, 0)
+        Assert.IsTrue(Abs(p.DistanceTo(s) - 0) < GeometRi3D.Tolerance)
+        p = New Point3d(4, 4, 0)
+        Assert.IsTrue(Abs(p.DistanceTo(s) - Sqrt(2)) < GeometRi3D.Tolerance)
+        p = New Point3d(1, 3, 0)
+        Assert.IsTrue(Abs(p.DistanceTo(s) - Sqrt(2)) < GeometRi3D.Tolerance)
+    End Sub
+
     <TestMethod()> Public Sub PointProjectionToPlaneTest()
         Dim p1 As Point3d = New Point3d(-4, 3, 5)
         Dim s1 As Plane3d = New Plane3d(-1, 2, -2, 9)
@@ -67,6 +89,31 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim s1 As Plane3d = New Plane3d(-1, 2, -2, 9)
         Dim p1 As Point3d = s1.Point
         Assert.IsTrue(p1.BelongsTo(s1))
+    End Sub
+
+    <TestMethod()> Public Sub PointBelongsToRayTest()
+        Dim p As Point3d = New Point3d(0, 0, 0)
+        Dim r As Ray3d = New Ray3d(New Point3d(1, 1, 0), New Vector3d(1, 0, 0))
+        Assert.IsFalse(p.BelongsTo(r))
+
+        p = New Point3d(1, 1, 0)
+        Assert.IsTrue(p.BelongsTo(r))
+
+        p = New Point3d(3, 1, 0)
+        Assert.IsTrue(p.BelongsTo(r))
+    End Sub
+
+    <TestMethod()> Public Sub PointBelongsToSegmentTest()
+        Dim p As Point3d = New Point3d(0, 0, 0)
+        Dim s As Segment3d = New Segment3d(New Point3d(1, 1, 0), New Point3d(3, 3, 0))
+        Assert.IsFalse(p.BelongsTo(s))
+
+        p = New Point3d(1, 1, 0)
+        Assert.IsTrue(p.BelongsTo(s))
+        p = New Point3d(2, 2, 0)
+        Assert.IsTrue(p.BelongsTo(s))
+        p = New Point3d(3, 3, 0)
+        Assert.IsTrue(p.BelongsTo(s))
     End Sub
 
     '===============================================================

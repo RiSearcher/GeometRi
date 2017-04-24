@@ -49,6 +49,15 @@ Public Class Ray3d
         End Set
     End Property
 
+    ''' <summary>
+    ''' Convert ray to line
+    ''' </summary>
+    Public ReadOnly Property ToLine As Line3d
+        Get
+            Return New Line3d(Me.Point, Me.Direction)
+        End Get
+    End Property
+
 
     ''' <summary>
     ''' Shortest distance to a line

@@ -144,6 +144,7 @@ Public Class Point3d
         Return tmp
     End Function
 
+#Region "DistaneTo"
     ''' <summary>
     ''' Returns distance between two points
     ''' </summary>
@@ -151,6 +152,7 @@ Public Class Point3d
         If (Me._coord <> p._coord) Then p = p.ConvertTo(Me._coord)
         Return New Vector3d(Me, p).Norm
     End Function
+
     ''' <summary>
     ''' Returns shortest distance to the line
     ''' </summary>
@@ -160,6 +162,7 @@ Public Class Point3d
         Dim v As Vector3d = New Vector3d(Me, l.Point)
         Return v.Cross(l.Direction).Norm / l.Direction.Norm
     End Function
+
     ''' <summary>
     ''' Returns shortest distance from point to the plane
     ''' </summary>
@@ -167,6 +170,31 @@ Public Class Point3d
         s.SetCoord(Me.Coord)
         Return Abs(X * s.A + Y * s.B + Z * s.C + s.D) / Sqrt(s.A ^ 2 + s.B ^ 2 + s.C ^ 2)
     End Function
+
+    ''' <summary>
+    ''' Returns shortest distance from point to the ray
+    ''' </summary>
+    Public Function DistanceTo(r As Ray3d) As Double
+        If Me.ProjectionTo(r.ToLine).BelongsTo(r) Then
+            Return Me.DistanceTo(r.ToLine)
+        Else
+            Return Me.DistanceTo(r.Point)
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Returns shortest distance from point to the segment
+    ''' </summary>
+    Public Function DistanceTo(s As Segment3d) As Double
+        If Me.ProjectionTo(s.ToLine).BelongsTo(s) Then
+            Return Me.DistanceTo(s.ToLine)
+        Else
+            Return Min(Me.DistanceTo(s.P1), Me.DistanceTo(s.P2))
+        End If
+    End Function
+
+#End Region
+
 
     ''' <summary>
     ''' Returns orthogonal projection of the point to the plane
@@ -229,7 +257,7 @@ Public Class Point3d
     ''' </summary>
     ''' <returns>True, if the point belongs to the segment</returns>
     Public Function BelongsTo(s As Segment3d) As Boolean
-        Return Me.BelongsTo(s.ToRay) AndAlso Me.BelongsTo(New Segment3d(s.P2, s.P1))
+        Return Me.BelongsTo(s.ToRay) AndAlso Me.BelongsTo(New Ray3d(s.P2, New Vector3d(s.P2, s.P1)))
     End Function
 
     ''' <summary>
