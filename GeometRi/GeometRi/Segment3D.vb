@@ -93,6 +93,91 @@ Public Class Segment3d
             Return Min(Me.P1.DistanceTo(l), Me.P2.DistanceTo(l))
         End If
     End Function
+
+    ''' <summary>
+    ''' Returns shortest distance between two segments
+    ''' </summary>
+    Public Function DistanceTo(s As Segment3d) As Double
+
+        ' Algorithm by Dan Sunday
+        ' http://geomalgorithms.com/a07-_distance.html
+
+        Dim small As Double = 0.000000001
+
+        Dim u As Vector3d = Me.ToVector
+        Dim v As Vector3d = s.ToVector
+        Dim w As Vector3d = New Vector3d(s.P1, Me.P1)
+
+        Dim a As Double = u * u
+        Dim b As Double = u * v
+        Dim c As Double = v * v
+        Dim d As Double = u * w
+        Dim e As Double = v * w
+
+        Dim DD As Double = a * c - b * b
+        Dim sc, sN, sD, tc, tN, tD As Double
+        sD = DD
+        tD = DD
+
+        If DD < small Then
+            ' the lines are almost parallel, force using point Me.P1 to prevent possible division by 0.0 later
+            sN = 0.0
+            sD = 1.0
+            tN = e
+            tD = c
+        Else
+            ' get the closest points on the infinite lines
+            sN = (b * e - c * d)
+            tN = (a * e - b * d)
+            If (sN < 0.0) Then
+                ' sc < 0 => the s=0 edge Is visible
+                sN = 0.0
+                tN = e
+                tD = c
+            ElseIf (sN > sD) Then
+                ' sc > 1  => the s=1 edge Is visible
+                sN = sD
+                tN = e + b
+                tD = c
+            End If
+        End If
+
+        If (tN < 0.0) Then
+            ' tc < 0 => the t=0 edge Is visible
+            tN = 0.0
+            ' recompute sc for this edge
+            If (-d < 0.0) Then
+                sN = 0.0
+            ElseIf (-d > a) Then
+                sN = sD
+            Else
+                sN = -d
+                sD = a
+            End If
+        ElseIf (tN > tD) Then
+            ' tc > 1  => the t=1 edge Is visible
+            tN = tD
+            ' recompute sc for this edge
+            If ((-d + b) < 0.0) Then
+                sN = 0
+            ElseIf ((-d + b) > a) Then
+                sN = sD
+            Else
+                sN = (-d + b)
+                sD = a
+            End If
+        End If
+
+        ' finally do the division to get sc And tc
+        sc = If(Abs(sN) < small, 0.0, sN / sD)
+        tc = If(Abs(tN) < small, 0.0, tN / tD)
+
+        ' get the difference of the two closest points
+        Dim dP As Vector3d = w + (sc * u) - (tc * v)  ' =  S1(sc) - S2(tc)
+
+        Return dP.Norm
+
+    End Function
 #End Region
 
     ''' <summary>

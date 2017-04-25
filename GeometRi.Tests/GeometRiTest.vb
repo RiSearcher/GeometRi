@@ -299,6 +299,24 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.IsTrue(Abs(r.DistanceTo(l)) < GeometRi3D.Tolerance)
     End Sub
 
+    <TestMethod()> Public Sub SegmentDistanceToSegmentTest()
+        Dim s1 As Segment3d = New Segment3d(New Point3d(-5, 0, 0), New Point3d(5, 0, 0))
+        Dim s2 As Segment3d = New Segment3d(New Point3d(-2, -3, 1), New Point3d(5, 6, 1))
+        Assert.IsTrue(Abs(s1.DistanceTo(s2) - 1) < GeometRi3D.Tolerance)
+
+        s2 = New Segment3d(New Point3d(6, -3, 1), New Point3d(6, 6, 1))
+        Assert.IsTrue(Abs(s1.DistanceTo(s2) - Sqrt(2)) < GeometRi3D.Tolerance)
+
+        s2 = New Segment3d(New Point3d(2, 4, 0), New Point3d(6, 8, 0))
+        Assert.IsTrue(Abs(s1.DistanceTo(s2) - 4) < GeometRi3D.Tolerance)
+
+        s2 = New Segment3d(New Point3d(2, 4, 5), New Point3d(4, 0, 2))
+        Assert.IsTrue(Abs(s1.DistanceTo(s2) - 2) < GeometRi3D.Tolerance)
+
+        s2 = New Segment3d(New Point3d(-7, -6, 0), New Point3d(-5, -2, 0))
+        Assert.IsTrue(Abs(s1.DistanceTo(s2) - 2) < GeometRi3D.Tolerance)
+    End Sub
+
     <TestMethod()> Public Sub SegmentAngleToPlaneTest()
         Dim s As Plane3d = New Plane3d(0, 0, 1, -1)
         Dim r1 As Segment3d = New Segment3d(New Point3d(0, 0, 3), New Point3d(1, 0, 4))
