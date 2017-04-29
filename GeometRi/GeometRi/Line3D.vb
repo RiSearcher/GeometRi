@@ -61,6 +61,27 @@ Public Class Line3d
         End Set
     End Property
 
+#Region "DistanceTo"
+    ''' <summary>
+    ''' Shortest distance line and point
+    ''' </summary>
+    Public Function DistanceTo(p As Point3d) As Double
+        Return p.DistanceTo(Me)
+    End Function
+
+    ''' <summary>
+    ''' Shortest distance line and ray
+    ''' </summary>
+    Public Function DistanceTo(r As Ray3d) As Double
+        Return r.DistanceTo(Me)
+    End Function
+
+    ''' <summary>
+    ''' Shortest distance line and segment
+    ''' </summary>
+    Public Function DistanceTo(s As Segment3d) As Double
+        Return s.DistanceTo(Me)
+    End Function
 
     ''' <summary>
     ''' Shortest distance between two lines
@@ -78,6 +99,8 @@ Public Class Line3d
             Return (r2 - r1).Cross(s1).Norm / s1.Norm
         End If
     End Function
+#End Region
+
 
     ''' <summary>
     ''' Point on the perpendicular to the second line

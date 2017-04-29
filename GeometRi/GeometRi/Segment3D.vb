@@ -178,6 +178,42 @@ Public Class Segment3d
         Return dP.Norm
 
     End Function
+
+    ''' <summary>
+    ''' Returns shortest distance from segment to ray
+    ''' </summary>
+    Public Function DistanceTo(r As Ray3d) As Double
+
+        If Me.ToVector.IsParallelTo(r.Direction) Then Return Me.ToLine.DistanceTo(r.ToLine)
+
+        If Me.ToLine.PerpendicularTo(r.ToLine).BelongsTo(r) AndAlso
+                 r.ToLine.PerpendicularTo(Me.ToLine).BelongsTo(Me) Then
+            Return Me.ToLine.DistanceTo(r.ToLine)
+        End If
+
+        Dim d1 As Double = Double.PositiveInfinity
+        Dim d2 As Double = Double.PositiveInfinity
+        Dim d3 As Double = Double.PositiveInfinity
+        Dim flag As Boolean = False
+
+        If r.Point.ProjectionTo(Me.ToLine).BelongsTo(Me) Then
+            d1 = r.Point.DistanceTo(Me.ToLine)
+            flag = True
+        End If
+        If Me.P1.ProjectionTo(r.ToLine).BelongsTo(r) Then
+            d2 = Me.P1.DistanceTo(r.ToLine)
+            flag = True
+        End If
+        If Me.P2.ProjectionTo(r.ToLine).BelongsTo(r) Then
+            d3 = Me.P2.DistanceTo(r.ToLine)
+            flag = True
+        End If
+
+        If flag Then Return Min(d1, Min(d2, d3))
+
+        Return Min(Me.P1.DistanceTo(r.Point), Me.P2.DistanceTo(r.Point))
+
+    End Function
 #End Region
 
     ''' <summary>

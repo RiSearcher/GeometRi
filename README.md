@@ -82,7 +82,7 @@ Represent ray in 3D space and is defined by starting point and direction vector.
 #### Plane3d
 
 Defined by arbutrary point on the plane and a normal vector. 
-Optionally can be defined by coefficients in general equation of plane (A*x + B*y + C*z + D = 0), by three points
+Optionally can be defined by coefficients in general equation of plane (Ax + By + Cz + D = 0), by three points
 or by point and two vectors in the plane.
 
 #### Coord3d

@@ -58,6 +58,13 @@ Public Class Ray3d
         End Get
     End Property
 
+#Region "DistanceTo"
+    ''' <summary>
+    ''' Distance from ray to point
+    ''' </summary>
+    Public Function DistanceTo(p As Point3d) As Double
+        Return p.DistanceTo(Me)
+    End Function
 
     ''' <summary>
     ''' Shortest distance to a line
@@ -80,6 +87,48 @@ Public Class Ray3d
             Return (r2 - r1).Cross(s1).Norm / s1.Norm
         End If
     End Function
+
+    ''' <summary>
+    ''' Distance to a segment
+    ''' </summary>
+    Public Function DistanceTo(s As Segment3d) As Double
+        Return s.DistanceTo(Me)
+    End Function
+
+    ''' <summary>
+    ''' Distance between two segments
+    ''' </summary>
+    Public Function DistanceTo(r As Ray3d) As Double
+
+        If Me.Direction.IsParallelTo(r.Direction) Then Return Me.ToLine.DistanceTo(r.ToLine)
+
+        If Me.ToLine.PerpendicularTo(r.ToLine).BelongsTo(r) AndAlso
+                r.ToLine.PerpendicularTo(Me.ToLine).BelongsTo(Me) Then
+            Return Me.ToLine.DistanceTo(r.ToLine)
+        End If
+
+        Dim d1 As Double = Double.PositiveInfinity
+        Dim d2 As Double = Double.PositiveInfinity
+        Dim flag As Boolean = False
+
+        If r.Point.ProjectionTo(Me.ToLine).BelongsTo(Me) Then
+            d1 = r.Point.DistanceTo(Me.ToLine)
+            flag = True
+        End If
+        If Me.Point.ProjectionTo(r.ToLine).BelongsTo(r) Then
+            d2 = Me.Point.DistanceTo(r.ToLine)
+            flag = True
+        End If
+
+        If flag Then
+            Return Min(d1, d2)
+        Else
+            Return Me.Point.DistanceTo(r.Point)
+        End If
+
+    End Function
+#End Region
+
 
     ''' <summary>
     ''' Point on the perpendicular to the line
