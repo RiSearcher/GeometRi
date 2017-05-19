@@ -78,6 +78,40 @@ Public Class Matrix3d
         End Set
     End Property
 
+    Public Property Column1 As Vector3d
+        Get
+            Return New Vector3d(val(0, 0), val(1, 0), val(2, 0))
+        End Get
+        Set(value As Vector3d)
+            val(0, 0) = value.X
+            val(1, 0) = value.Y
+            val(2, 0) = value.Z
+        End Set
+    End Property
+    Public Property Column2 As Vector3d
+        Get
+            Return New Vector3d(val(0, 1), val(1, 1), val(2, 1))
+        End Get
+        Set(value As Vector3d)
+            val(0, 1) = value.X
+            val(1, 1) = value.Y
+            val(2, 1) = value.Z
+        End Set
+    End Property
+    Public Property Column3 As Vector3d
+        Get
+            Return New Vector3d(val(0, 2), val(1, 2), val(2, 2))
+        End Get
+        Set(value As Vector3d)
+            val(0, 2) = value.X
+            val(1, 2) = value.Y
+            val(2, 2) = value.Z
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Determinant of the matrix
+    ''' </summary>
     Public ReadOnly Property Det As Double
         Get
             Det = val(0, 0) * (val(1, 1) * val(2, 2) - val(1, 2) * val(2, 1)) -

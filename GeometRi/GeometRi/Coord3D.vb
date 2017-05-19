@@ -118,7 +118,6 @@ Public Class Coord3d
     ''' <returns></returns>
     Public Property Origin As Point3d
         Get
-            'Return _origin
             Return New Point3d(_origin.X, _origin.Y, _origin.Z)
         End Get
         Set(value As Point3d)
@@ -183,25 +182,47 @@ Public Class Coord3d
         End Get
     End Property
 
+    ''' <summary>
+    ''' XY plane in the current coordinate system
+    ''' </summary>
     Public ReadOnly Property XY_plane As Plane3d
         Get
             Return New Plane3d(0, 0, 1, 0, Me)
         End Get
     End Property
+
+    ''' <summary>
+    ''' XZ plane in the current coordinate system
+    ''' </summary>
     Public ReadOnly Property XZ_plane As Plane3d
         Get
             Return New Plane3d(0, 1, 0, 0, Me)
         End Get
     End Property
+
+    ''' <summary>
+    ''' YZ plane in the current coordinate system
+    ''' </summary>
     Public ReadOnly Property YZ_plane As Plane3d
         Get
             Return New Plane3d(1, 0, 0, 0, Me)
         End Get
     End Property
 
+    ''' <summary>
+    ''' Rotate coordinate system around rotation axis
+    ''' </summary>
+    ''' <param name="axis">Rotation axis</param>
+    ''' <param name="angle">Rotation angle (radians, counterclockwise)</param>
     Public Sub Rotate(axis As Vector3d, angle As Double)
         _axes = _axes * Matrix3d.RotationMatrix(axis.ConvertToGlobal, angle).Transpose
     End Sub
+
+    ''' <summary>
+    ''' Rotate coordinate system around rotation axis
+    ''' </summary>
+    ''' <param name="axis">Rotation axis</param>
+    ''' <param name="angle">Rotation angle (degrees, counterclockwise)</param>
     Public Sub RotateDeg(axis As Vector3d, angle As Double)
         _axes = _axes * Matrix3d.RotationMatrix(axis.ConvertToGlobal, angle * PI / 180).Transpose
     End Sub

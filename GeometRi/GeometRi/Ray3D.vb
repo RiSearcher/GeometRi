@@ -96,7 +96,7 @@ Public Class Ray3d
     End Function
 
     ''' <summary>
-    ''' Distance between two segments
+    ''' Distance between two rays
     ''' </summary>
     Public Function DistanceTo(r As Ray3d) As Double
 

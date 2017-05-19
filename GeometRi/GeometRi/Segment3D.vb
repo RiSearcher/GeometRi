@@ -57,7 +57,7 @@ Public Class Segment3d
 
     Public ReadOnly Property ToLine As Line3d
         Get
-            Return New Line3d(_p1, New Vector3d(_p1, _p2))
+            Return New Line3d(_p1, _p2)
         End Get
     End Property
 

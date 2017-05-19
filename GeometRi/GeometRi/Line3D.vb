@@ -25,6 +25,16 @@ Public Class Line3d
         _point = p.Clone
         _dir = v.Clone
     End Sub
+
+    ''' <summary>
+    ''' Create line by two points.
+    ''' </summary>
+    ''' <param name="p1">First point.</param>
+    ''' <param name="p2">Second point.</param>
+    Public Sub New(ByVal p1 As Point3d, ByVal p2 As Point3d)
+        _point = p1.Clone
+        _dir = New Vector3d(p1, p2)
+    End Sub
 #End Region
 
 
@@ -63,21 +73,21 @@ Public Class Line3d
 
 #Region "DistanceTo"
     ''' <summary>
-    ''' Shortest distance line and point
+    ''' Shortest distance between line and point
     ''' </summary>
     Public Function DistanceTo(p As Point3d) As Double
         Return p.DistanceTo(Me)
     End Function
 
     ''' <summary>
-    ''' Shortest distance line and ray
+    ''' Shortest distance between line and ray
     ''' </summary>
     Public Function DistanceTo(r As Ray3d) As Double
         Return r.DistanceTo(Me)
     End Function
 
     ''' <summary>
-    ''' Shortest distance line and segment
+    ''' Shortest distance between line and segment
     ''' </summary>
     Public Function DistanceTo(s As Segment3d) As Double
         Return s.DistanceTo(Me)
