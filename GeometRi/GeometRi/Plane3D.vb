@@ -73,11 +73,14 @@ Public Class Plane3d
 
 
     Public Function Clone() As Object Implements ICloneable.Clone
-        Return DirectCast(MemberwiseClone(), Plane3d)
+        Dim newobj As Plane3d = DirectCast(MemberwiseClone(), Plane3d)
+        newobj.Point = newobj.Point.Clone
+        newobj.Normal = newobj.Normal.Clone
+        Return newobj
     End Function
 
     ''' <summary>
-    ''' Base point of the line
+    ''' Point of the plane
     ''' </summary>
     ''' <returns></returns>
     Public Property Point As Point3d
@@ -90,10 +93,10 @@ Public Class Plane3d
     End Property
 
     ''' <summary>
-    ''' Direction vector of the line
+    ''' Normal vector of the plane
     ''' </summary>
     ''' <returns></returns>
-    Public Property Direction As Vector3d
+    Public Property Normal As Vector3d
         Get
             Return _normal.Clone
         End Get
@@ -128,13 +131,6 @@ Public Class Plane3d
             D = -v.X * p.X - v.Y * p.Y - v.Z * p.Z
         End Get
     End Property
-
-    Public ReadOnly Property Normal As Vector3d
-        Get
-            Return _normal.Clone
-        End Get
-    End Property
-
 
 
 

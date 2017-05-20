@@ -75,6 +75,7 @@
     <Compile Include="GeometRi\Point3D.vb" />
     <Compile Include="GeometRi\Ray3D.vb" />
     <Compile Include="GeometRi\Segment3D.vb" />
+    <Compile Include="GeometRi\Sphere.vb" />
     <Compile Include="GeometRi\Vector3D.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

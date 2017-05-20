@@ -772,7 +772,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim s3 As Plane3d = New Plane3d(2, 5, 1, -2, Coord3d.GlobalCS)
         Dim p1 As Point3d = s1.IntersectionWith(s2, s3)
         s1.Point = s1.Point.ConvertTo(coord2)
-        s2.Direction = s2.Direction.ConvertTo(coord1).ConvertTo(coord2)
+        s2.Normal = s2.Normal.ConvertTo(coord1).ConvertTo(coord2)
         s3.Point = s3.Point.ConvertTo(coord2).ConvertTo(coord1)
         Dim p2 As Point3d = s2.IntersectionWith(s1, s3)
 
@@ -946,6 +946,41 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         lt.Point = lt.Point.ConvertTo(coord2)
 
         Assert.IsTrue(lt.ReflectIn(l2) = l1)
+    End Sub
+
+    '===============================================================
+    ' Sphere tests
+    '===============================================================
+
+    <TestMethod()> Public Sub SphereEqualTest()
+        Dim s1 As Sphere = New Sphere(New Point3d(0, 0, 0), 5)
+        Dim s2 As Sphere = New Sphere(New Point3d(0, 0, 0), 6)
+        Assert.IsTrue(s1 <> s2)
+
+        s1 = New Sphere(New Point3d(0, 0, 0), 5)
+        s2 = New Sphere(New Point3d(1, 0, 0), 5)
+        Assert.IsTrue(s1 <> s2)
+
+        s1 = New Sphere(New Point3d(0, 0, 0), 5)
+        s2 = New Sphere(New Point3d(0, 0, 0), 5)
+        Assert.IsTrue(s1 = s2)
+    End Sub
+
+    <TestMethod()> Public Sub SphereIntersectionWithLineTest()
+        Dim l As Line3d = New Line3d(New Point3d(5, 0, -6), New Vector3d(1, 0, 0))
+        Dim s As Sphere = New Sphere(New Point3d(0, 0, 0), 5)
+
+        Assert.IsTrue(s.IntersectionWith(l) = Nothing)
+
+        l.Point = New Point3d(5, 0, -5)
+        Assert.IsTrue(s.IntersectionWith(l) = New Point3d(0, 0, -5))
+
+        l.Point = New Point3d(0, 0, 0)
+        l.Direction = New Vector3d(1, 0, 0)
+        Assert.IsTrue(s.IntersectionWith(l) = New Segment3d(New Point3d(-5, 0, 0), New Point3d(5, 0, 0)))
+
+        l.Direction = New Vector3d(1, 3, 4)
+        Assert.IsTrue(s.IntersectionWith(l).Length = 10)
     End Sub
 
 End Class
