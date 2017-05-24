@@ -30,6 +30,9 @@ Public Class Sphere
         End Set
     End Property
 
+    ''' <summary>
+    ''' Radius of the sphere
+    ''' </summary>
     Public Property Radius As Double
         Get
             Return _r
@@ -51,6 +54,55 @@ Public Class Sphere
         End Get
     End Property
 
+#Region "DistaneTo"
+    Public Function DistanceTo(p As Point3d) As Double
+        Dim d As Double = p.DistanceTo(Me.Center)
+        If d > Me.Radius Then
+            Return d - Me.Radius
+        Else
+            Return 0
+        End If
+    End Function
+
+    Public Function DistanceTo(l As Line3d) As Double
+        Dim d As Double = l.DistanceTo(Me.Center)
+        If d > Me.Radius Then
+            Return d - Me.Radius
+        Else
+            Return 0
+        End If
+    End Function
+
+    Public Function DistanceTo(r As Ray3d) As Double
+        If Me.Center.ProjectionTo(r.ToLine).BelongsTo(r) Then
+            Return Me.DistanceTo(r.ToLine)
+        Else
+            Return Me.DistanceTo(r.Point)
+        End If
+    End Function
+
+    Public Function DistanceTo(s As Segment3d) As Double
+        If Me.Center.ProjectionTo(s.ToLine).BelongsTo(s) Then
+            Return Me.DistanceTo(s.ToLine)
+        Else
+            Return Min(Me.DistanceTo(s.P1), Me.DistanceTo(s.P2))
+        End If
+    End Function
+
+    Public Function DistanceTo(s As Plane3d) As Double
+        Dim d As Double = Me.Center.DistanceTo(s)
+        If d > Me.Radius Then
+            Return d - Me.Radius
+        Else
+            Return 0
+        End If
+    End Function
+#End Region
+
+    ''' <summary>
+    ''' Get intersection of line with sphere.
+    ''' Returns object of type 'Nothing', 'Point3d' or 'Segment3d'.
+    ''' </summary>
     Public Function IntersectionWith(l As Line3d) As Object
 
         Dim d As Double = l.Direction.Normalized * (l.Point.ToVector - Me.Center.ToVector)

@@ -52,9 +52,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -67,6 +64,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeometRi\Circle3D.vb" />
     <Compile Include="GeometRi\Coord3D.vb" />
     <Compile Include="GeometRi\GeometRi3D.vb" />
     <Compile Include="GeometRi\Line3D.vb" />

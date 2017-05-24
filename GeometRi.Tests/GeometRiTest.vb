@@ -77,6 +77,14 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.IsTrue(p1.ProjectionTo(l1) = New Point3d(-3, 1, 7))
     End Sub
 
+    <TestMethod()> Public Sub PointProjectionToSphereTest()
+        Dim p1 As Point3d = New Point3d(1, 1, 1)
+        Dim s As Sphere = New Sphere(p1, 2)
+        Dim p2 As Point3d = New Point3d(5, 5, 5)
+
+        Assert.IsTrue(p2.ProjectionTo(s) = New Point3d(1 + 2 / Sqrt(3), 1 + 2 / Sqrt(3), 1 + 2 / Sqrt(3)))
+    End Sub
+
     <TestMethod()> Public Sub PointBelongsToLineTest()
         Dim p1 As Point3d = New Point3d(1, -5, -1)
         Dim v1 As Vector3d = New Vector3d(-2, 3, 4)

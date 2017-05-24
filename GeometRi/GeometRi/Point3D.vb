@@ -199,8 +199,6 @@ Public Class Point3d
     ''' <summary>
     ''' Returns orthogonal projection of the point to the plane
     ''' </summary>
-    ''' <param name="s"></param>
-    ''' <returns></returns>
     Public Function ProjectionTo(s As Plane3d) As Point3d
         Dim r0 As Vector3d = New Vector3d(Me)
         s.SetCoord(Me.Coord)
@@ -211,14 +209,20 @@ Public Class Point3d
     ''' <summary>
     ''' Returns orthogonal projection of the point to the line
     ''' </summary>
-    ''' <param name="l"></param>
-    ''' <returns></returns>
     Public Function ProjectionTo(l As Line3d) As Point3d
         Dim r0 As Vector3d = New Vector3d(Me)
         Dim r1 As Vector3d = l.Point.ToVector
         Dim s As Vector3d = l.Direction
         r0 = r1 - ((r1 - r0) * s) / (s * s) * s
         Return r0.ToPoint
+    End Function
+
+    ''' <summary>
+    ''' Returns orthogonal projection of the point to the surface of the sphere
+    ''' </summary>
+    Public Function ProjectionTo(s As Sphere) As Point3d
+        Dim v As Vector3d = New Vector3d(s.Center, Me)
+        Return s.Center + s.Radius * v.Normalized.ToPoint
     End Function
 
     ''' <summary>
@@ -263,11 +267,18 @@ Public Class Point3d
     ''' <summary>
     ''' Check if point belongs to the plane
     ''' </summary>
-    ''' <param name="s"></param>
     ''' <returns>True, if the point belongs to the plane</returns>
     Public Function BelongsTo(s As Plane3d) As Boolean
         s.SetCoord(Me.Coord)
         Return Abs(s.A * X + s.B * Y + s.C * Z + s.D) < Tolerance
+    End Function
+
+    ''' <summary>
+    ''' Check if point belongs to the sphere
+    ''' </summary>
+    ''' <returns>True, if the point belongs to the sphere</returns>
+    Public Function BelongsTo(s As Sphere) As Boolean
+        Return Me.DistanceTo(s.Center) < s.Radius + Tolerance
     End Function
 
 #Region "TranslateRotateReflect"
