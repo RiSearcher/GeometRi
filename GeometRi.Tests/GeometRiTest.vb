@@ -991,4 +991,19 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.IsTrue(s.IntersectionWith(l).Length = 10)
     End Sub
 
+    '===============================================================
+    ' Circle3d tests
+    '===============================================================
+
+    <TestMethod()> Public Sub CircleBy3PointsTest()
+        Dim p1 As Point3d = New Point3d(-3, 0, 4)
+        Dim p2 As Point3d = New Point3d(4, 0, 5)
+        Dim p3 As Point3d = New Point3d(1, 0, -4)
+
+        Dim c As Circle3d = New Circle3d(p1, p2, p3)
+
+        Assert.IsTrue(c.Center = New Point3d(1, 0, 1))
+        Assert.IsTrue(Abs(c.Radius - 5) <= GeometRi3D.Tolerance)
+    End Sub
+
 End Class

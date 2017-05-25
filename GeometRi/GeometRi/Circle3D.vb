@@ -8,10 +8,36 @@ Public Class Circle3d
     Private _r As Double
     Private _normal As Vector3d
 
-    Sub New(Center As Point3d, Radius As Double, Normal As Vector3d)
+    Public Sub New(Center As Point3d, Radius As Double, Normal As Vector3d)
         _point = Center
         _r = Radius
         _normal = Normal
+    End Sub
+
+    Public Sub New(p1 As Point3d, p2 As Point3d, p3 As Point3d)
+
+        Dim v1 As Vector3d = New Vector3d(p1, p2)
+        Dim v2 As Vector3d = New Vector3d(p1, p3)
+        If v1.Cross(v2).Norm < GeometRi3D.Tolerance Then
+            Throw New Exception("Collinear points")
+        End If
+
+        Dim CS As Coord3d = New Coord3d(p1, v1, v2)
+        Dim a1 As Point3d = p1.ConvertTo(CS)
+        Dim a2 As Point3d = p2.ConvertTo(CS)
+        Dim a3 As Point3d = p3.ConvertTo(CS)
+
+        Dim d1 As Double = a1.X ^ 2 + a1.Y ^ 2
+        Dim d2 As Double = a2.X ^ 2 + a2.Y ^ 2
+        Dim d3 As Double = a3.X ^ 2 + a3.Y ^ 2
+        Dim f As Double = 2.0 * (a1.X * (a2.Y - a3.Y) - a1.Y * (a2.X - a3.X) + a2.X * a3.Y - a3.X * a2.Y)
+
+        Dim X = (d1 * (a2.Y - a3.Y) + d2 * (a3.Y - a1.Y) + d3 * (a1.Y - a2.Y)) / f
+        Dim Y = (d1 * (a3.X - a2.X) + d2 * (a1.X - a3.X) + d3 * (a2.X - a1.X)) / f
+        _point = (New Point3d(X, Y, 0, CS)).ConvertTo(p1.Coord)
+        _r = Sqrt((X - a1.X) ^ 2 + (Y - a1.Y) ^ 2)
+        _normal = v1.Cross(v2)
+
     End Sub
 
     Public Function Clone() As Object Implements ICloneable.Clone
