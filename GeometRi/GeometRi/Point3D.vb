@@ -222,7 +222,7 @@ Public Class Point3d
     ''' </summary>
     Public Function ProjectionTo(s As Sphere) As Point3d
         Dim v As Vector3d = New Vector3d(s.Center, Me)
-        Return s.Center + s.Radius * v.Normalized.ToPoint
+        Return s.Center + s.R * v.Normalized.ToPoint
     End Function
 
     ''' <summary>
@@ -278,7 +278,7 @@ Public Class Point3d
     ''' </summary>
     ''' <returns>True, if the point belongs to the sphere</returns>
     Public Function BelongsTo(s As Sphere) As Boolean
-        Return Me.DistanceTo(s.Center) < s.Radius + Tolerance
+        Return Me.DistanceTo(s.Center) < s.R + Tolerance
     End Function
 
 #Region "TranslateRotateReflect"

@@ -62,7 +62,7 @@ Public Class Circle3d
     ''' <summary>
     ''' Radius of the circle
     ''' </summary>
-    Public Property Radius As Double
+    Public Property R As Double
         Get
             Return _r
         End Get
@@ -102,8 +102,8 @@ Public Class Circle3d
         Dim c As Circle3d = CType(obj, Circle3d)
 
         Return c.Center = Me.Center AndAlso
-               Abs(c.Radius - Me.Radius) <= GeometRi3D.Tolerance AndAlso
-               c.Normal = Me.Normal
+               Abs(c.R - Me.R) <= GeometRi3D.Tolerance AndAlso
+               c.Normal.IsParallelTo(Me.Normal)
     End Function
 
     Public Overloads Function ToString() As String

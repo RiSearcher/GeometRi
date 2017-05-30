@@ -20,6 +20,7 @@ Public Class Sphere
         Return newobj
     End Function
 
+#Region "Properties"
     ''' <summary>
     ''' Center of the sphere
     ''' </summary>
@@ -33,9 +34,45 @@ Public Class Sphere
     End Property
 
     ''' <summary>
+    ''' X componente of the spheres center
+    ''' </summary>
+    Public Property X As Double
+        Get
+            Return _point.X
+        End Get
+        Set(value As Double)
+            _point.X = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Y componente of the spheres center
+    ''' </summary>
+    Public Property Y As Double
+        Get
+            Return _point.Y
+        End Get
+        Set(value As Double)
+            _point.Y = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Z componente of the spheres center
+    ''' </summary>
+    Public Property Z As Double
+        Get
+            Return _point.Z
+        End Get
+        Set(value As Double)
+            _point.Z = value
+        End Set
+    End Property
+
+    ''' <summary>
     ''' Radius of the sphere
     ''' </summary>
-    Public Property Radius As Double
+    Public Property R As Double
         Get
             Return _r
         End Get
@@ -55,12 +92,13 @@ Public Class Sphere
             Return 4.0 / 3.0 * PI * _r ^ 3
         End Get
     End Property
+#End Region
 
 #Region "DistaneTo"
     Public Function DistanceTo(p As Point3d) As Double
         Dim d As Double = p.DistanceTo(Me.Center)
-        If d > Me.Radius Then
-            Return d - Me.Radius
+        If d > Me.R Then
+            Return d - Me.R
         Else
             Return 0
         End If
@@ -68,8 +106,8 @@ Public Class Sphere
 
     Public Function DistanceTo(l As Line3d) As Double
         Dim d As Double = l.DistanceTo(Me.Center)
-        If d > Me.Radius Then
-            Return d - Me.Radius
+        If d > Me.R Then
+            Return d - Me.R
         Else
             Return 0
         End If
@@ -93,14 +131,15 @@ Public Class Sphere
 
     Public Function DistanceTo(s As Plane3d) As Double
         Dim d As Double = Me.Center.DistanceTo(s)
-        If d > Me.Radius Then
-            Return d - Me.Radius
+        If d > Me.R Then
+            Return d - Me.R
         Else
             Return 0
         End If
     End Function
 #End Region
 
+#Region "Intersections"
     ''' <summary>
     ''' Get intersection of line with sphere.
     ''' Returns object of type 'Nothing', 'Point3d' or 'Segment3d'.
@@ -122,13 +161,84 @@ Public Class Sphere
 
     End Function
 
+    ''' <summary>
+    ''' Get intersection of plane with sphere.
+    ''' Returns object of type 'Nothing', 'Point3d' or 'Circle3d'.
+    ''' </summary>
+    Public Function IntersectionWith(s As Plane3d) As Object
+
+        s.SetCoord(Me.Center.Coord)
+        Dim d1 As Double = s.A * Me.X + s.B * Me.Y + s.C * Me.Z + s.D
+        Dim d2 As Double = s.A ^ 2 + s.B ^ 2 + s.C ^ 2
+        Dim d As Double = Abs(d1) / Sqrt(d2)
+
+        If d > Me.R + GeometRi3D.Tolerance Then
+            Return Nothing
+        Else
+            Dim Xc As Double = Me.X - s.A * d1 / d2
+            Dim Yc As Double = Me.Y - s.B * d1 / d2
+            Dim Zc As Double = Me.Z - s.C * d1 / d2
+
+            If Abs(d - Me.R) < GeometRi3D.Tolerance Then
+                Return New Point3d(Xc, Yc, Zc, Me.Center.Coord)
+            Else
+                Dim R As Double = Sqrt(Me.R ^ 2 - d ^ 2)
+                Return New Circle3d(New Point3d(Xc, Yc, Zc, Me.Center.Coord), R, s.Normal)
+            End If
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Get intersection of two spheres.
+    ''' Returns object of type 'Nothing', 'Point3d' or 'Circle3d'.
+    ''' </summary>
+    Public Function IntersectionWith(s As Sphere) As Object
+
+        Dim p As Point3d = s.Center.ConvertTo(Me.Center.Coord)
+        Dim Dist As Double = Sqrt((Me.X - p.X) ^ 2 + (Me.Y - p.Y) ^ 2 + (Me.Z - p.Z) ^ 2)
+
+        ' Separated spheres
+        If Dist > Me.R + s.R + GeometRi3D.Tolerance Then Return Nothing
+
+        ' One sphere inside the other
+        If Dist < Abs(Me.R - s.R) - GeometRi3D.Tolerance Then Return Nothing
+
+        ' Intersection plane
+        Dim A As Double = 2 * (p.X - Me.X)
+        Dim B As Double = 2 * (p.Y - Me.Y)
+        Dim C As Double = 2 * (p.Z - Me.Z)
+        Dim D As Double = Me.X ^ 2 - p.X ^ 2 + Me.Y ^ 2 - p.Y ^ 2 + Me.Z ^ 2 - p.Z ^ 2 - Me.R ^ 2 + s.R ^ 2
+
+        ' Intersection center
+        Dim t As Double = (Me.X * A + Me.Y * B + Me.Z * C + D) / (A * (Me.X - p.X) + B * (Me.Y - p.Y) + C * (Me.Z - p.Z))
+        Dim x As Double = Me.X + t * (p.X - Me.X)
+        Dim y As Double = Me.Y + t * (p.Y - Me.Y)
+        Dim z As Double = Me.Z + t * (p.Z - Me.Z)
+
+        ' Outer tangency
+        If Abs(Me.R + s.R - D) < GeometRi3D.Tolerance Then Return New Point3d(x, y, z, Me.Center.Coord)
+
+        ' Inner tangency
+        If Abs(Abs(Me.R - s.R) - D) < GeometRi3D.Tolerance Then Return New Point3d(x, y, z, Me.Center.Coord)
+
+        ' Intersection
+        Dim alpha As Double = Acos((Me.R ^ 2 + Dist ^ 2 - s.R ^ 2) / (2 * Me.R * Dist))
+        Dim R As Double = Me.R * Sin(alpha)
+        Dim v As Vector3d = New Vector3d(Me.Center, s.Center)
+
+        Return New Circle3d(New Point3d(x, y, z, Me.Center.Coord), R, v)
+
+    End Function
+#End Region
+
+
     Public Overloads Overrides Function Equals(obj As Object) As Boolean
         If obj Is Nothing OrElse Not Me.GetType() Is obj.GetType() Then
             Return False
         End If
         Dim s As Sphere = CType(obj, Sphere)
 
-        Return s.Center = Me.Center AndAlso Abs(s.Radius - Me.Radius) <= GeometRi3D.Tolerance
+        Return s.Center = Me.Center AndAlso Abs(s.R - Me.R) <= GeometRi3D.Tolerance
     End Function
 
     Public Overloads Function ToString() As String

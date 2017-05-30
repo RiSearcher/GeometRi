@@ -240,7 +240,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.IsTrue(r.ProjectionTo(s) = New Ray3d(New Point3d(1, 1, 0), New Vector3d(1, 1, 0)))
     End Sub
 
-    <TestMethod()> Public Sub RayDistaneToRayTest()
+    <TestMethod()> Public Sub RayDistanceToRayTest()
         Dim r1 As Ray3d = New Ray3d(New Point3d(0, 0, 0), New Vector3d(1, 0, 0))
         Dim r2 As Ray3d = New Ray3d(New Point3d(5, 0, 5), New Vector3d(-1, 0, 0))
         Assert.IsTrue(Abs(r1.DistanceTo(r2) - 5) < GeometRi3D.Tolerance)
@@ -991,6 +991,25 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.IsTrue(s.IntersectionWith(l).Length = 10)
     End Sub
 
+    <TestMethod()> Public Sub SphereIntersectionWithPlaneTest()
+        Dim s As New Sphere(New Point3d(1, -1, 3), 3)
+        Dim p As New Plane3d(1, 4, 5, 6)
+        Dim c As Circle3d = s.IntersectionWith(p)
+        Assert.IsTrue(Abs(c.R - 1.13) < 0.005)
+        Assert.IsTrue(c.Center.DistanceTo(New Point3d(0.57, -2.71, 0.86)) < 0.01)
+    End Sub
+
+    <TestMethod()> Public Sub SphereIntersectionWithSphereTest()
+        Dim s1 As Sphere = New Sphere(New Point3d(-2, 2, 4), 5)
+        Dim s2 As Sphere = New Sphere(New Point3d(3, 7, 3), 5)
+        Dim c1 As Circle3d = s1.IntersectionWith(s2)
+        Assert.IsTrue(Abs(c1.R - 3.5) < GeometRi3D.Tolerance)
+        Assert.IsTrue(c1.Center = New Point3d(0.5, 4.5, 3.5))
+
+        Dim c2 As Circle3d = s2.IntersectionWith(s1)
+        Assert.IsTrue(c1 = c2)
+    End Sub
+
     '===============================================================
     ' Circle3d tests
     '===============================================================
@@ -1003,7 +1022,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim c As Circle3d = New Circle3d(p1, p2, p3)
 
         Assert.IsTrue(c.Center = New Point3d(1, 0, 1))
-        Assert.IsTrue(Abs(c.Radius - 5) <= GeometRi3D.Tolerance)
+        Assert.IsTrue(Abs(c.R - 5) <= GeometRi3D.Tolerance)
     End Sub
 
 End Class

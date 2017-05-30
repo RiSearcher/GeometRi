@@ -229,6 +229,14 @@ Public Class Plane3d
         End If
     End Function
 
+    ''' <summary>
+    ''' Get intersection of plane with sphere.
+    ''' Returns object of type 'Nothing', 'Point3d' or 'Circle3d'.
+    ''' </summary>
+    Public Function IntersectionWith(s As Sphere)
+        Return s.IntersectionWith(Me)
+    End Function
+
 
 #Region "AngleTo"
     ''' <summary>

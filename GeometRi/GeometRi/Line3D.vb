@@ -153,6 +153,14 @@ Public Class Line3d
     End Function
 
     ''' <summary>
+    ''' Get intersection of line with sphere.
+    ''' Returns object of type 'Nothing', 'Point3d' or 'Segment3d'.
+    ''' </summary>
+    Public Function IntersectionWith(s As Sphere) As Object
+        Return s.IntersectionWith(Me)
+    End Function
+
+    ''' <summary>
     ''' Get the orthogonal projection of a line to the plane.
     ''' Return object of type 'Line3d' or 'Point3d'
     ''' </summary>
