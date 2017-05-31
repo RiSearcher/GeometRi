@@ -34,7 +34,7 @@ Public Class Sphere
     End Property
 
     ''' <summary>
-    ''' X componente of the spheres center
+    ''' X component of the spheres center
     ''' </summary>
     Public Property X As Double
         Get
@@ -46,7 +46,7 @@ Public Class Sphere
     End Property
 
     ''' <summary>
-    ''' Y componente of the spheres center
+    ''' Y component of the spheres center
     ''' </summary>
     Public Property Y As Double
         Get
@@ -58,7 +58,7 @@ Public Class Sphere
     End Property
 
     ''' <summary>
-    ''' Z componente of the spheres center
+    ''' Z component of the spheres center
     ''' </summary>
     Public Property Z As Double
         Get

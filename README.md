@@ -27,7 +27,8 @@ Install-Package GeometRi
 * __Point3d__ and __Vector3d__ are two base classes, representing points and vectors in 3D space.
 Objects of type Point3d or Vector3d can be defined in global or in local coordinate systems.
 
-* __Line3d__, __Ray3d__, __Segment3d__ and __Plane3d__ are compound classes, which are defined in terms of points and vectors.
+* __Line3d__, __Ray3d__, __Segment3d__, __Plane3d__, __Circle3d__ and __Sphere__
+are compound classes, which are defined in terms of points and vectors.
 
 * __Coord3d__ and __Matrix3d__ are auxiliary classes.
 
