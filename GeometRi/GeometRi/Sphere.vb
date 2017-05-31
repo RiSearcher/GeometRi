@@ -94,7 +94,7 @@ Public Class Sphere
     End Property
 #End Region
 
-#Region "DistaneTo"
+#Region "DistanceTo"
     Public Function DistanceTo(p As Point3d) As Double
         Dim d As Double = p.DistanceTo(Me.Center)
         If d > Me.R Then
@@ -231,6 +231,49 @@ Public Class Sphere
     End Function
 #End Region
 
+#Region "TranslateRotateReflect"
+    ''' <summary>
+    ''' Translate sphere by a vector
+    ''' </summary>
+    Public Function Translate(v As Vector3d) As Sphere
+        Return New Sphere(Me.Center.Translate(v), Me.R)
+    End Function
+
+    ''' <summary>
+    ''' Rotate sphere by a given rotation matrix
+    ''' </summary>
+    Public Function Rotate(ByVal m As Matrix3d) As Sphere
+        Return New Sphere(Me.Center.Rotate(m), Me.R)
+    End Function
+
+    ''' <summary>
+    ''' Rotate sphere by a given rotation matrix around point 'p' as a rotation center
+    ''' </summary>
+    Public Function Rotate(m As Matrix3d, p As Point3d) As Sphere
+        Return New Sphere(Me.Center.Rotate(m, p), Me.R)
+    End Function
+
+    ''' <summary>
+    ''' Reflect sphere in given point
+    ''' </summary>
+    Public Function ReflectIn(p As Point3d) As Sphere
+        Return New Sphere(Me.Center.ReflectIn(p), Me.R)
+    End Function
+
+    ''' <summary>
+    ''' Reflect sphere in given line
+    ''' </summary>
+    Public Function ReflectIn(l As Line3d) As Sphere
+        Return New Sphere(Me.Center.ReflectIn(l), Me.R)
+    End Function
+
+    ''' <summary>
+    ''' Reflect sphere in given plane
+    ''' </summary>
+    Public Function ReflectIn(s As Plane3d) As Sphere
+        Return New Sphere(Me.Center.ReflectIn(s), Me.R)
+    End Function
+#End Region
 
     Public Overloads Overrides Function Equals(obj As Object) As Boolean
         If obj Is Nothing OrElse Not Me.GetType() Is obj.GetType() Then

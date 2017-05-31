@@ -95,6 +95,50 @@ Public Class Circle3d
         End Get
     End Property
 
+#Region "TranslateRotateReflect"
+    ''' <summary>
+    ''' Translate circle by a vector
+    ''' </summary>
+    Public Function Translate(v As Vector3d) As Circle3d
+        Return New Circle3d(Me.Center.Translate(v), Me.R, Me.Normal)
+    End Function
+
+    ''' <summary>
+    ''' Rotate circle by a given rotation matrix
+    ''' </summary>
+    Public Function Rotate(ByVal m As Matrix3d) As Circle3d
+        Return New Circle3d(Me.Center.Rotate(m), Me.R, Me.Normal.Rotate(m))
+    End Function
+
+    ''' <summary>
+    ''' Rotate circle by a given rotation matrix around point 'p' as a rotation center
+    ''' </summary>
+    Public Function Rotate(m As Matrix3d, p As Point3d) As Circle3d
+        Return New Circle3d(Me.Center.Rotate(m, p), Me.R, Me.Normal.Rotate(m))
+    End Function
+
+    ''' <summary>
+    ''' Reflect circle in given point
+    ''' </summary>
+    Public Function ReflectIn(p As Point3d) As Circle3d
+        Return New Circle3d(Me.Center.ReflectIn(p), Me.R, Me.Normal.ReflectIn(p))
+    End Function
+
+    ''' <summary>
+    ''' Reflect circle in given line
+    ''' </summary>
+    Public Function ReflectIn(l As Line3d) As Circle3d
+        Return New Circle3d(Me.Center.ReflectIn(l), Me.R, Me.Normal.ReflectIn(l))
+    End Function
+
+    ''' <summary>
+    ''' Reflect circle in given plane
+    ''' </summary>
+    Public Function ReflectIn(s As Plane3d) As Circle3d
+        Return New Circle3d(Me.Center.ReflectIn(s), Me.R, Me.Normal.ReflectIn(s))
+    End Function
+#End Region
+
     Public Overloads Overrides Function Equals(obj As Object) As Boolean
         If obj Is Nothing OrElse Not Me.GetType() Is obj.GetType() Then
             Return False
