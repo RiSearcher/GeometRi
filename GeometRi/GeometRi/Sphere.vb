@@ -231,6 +231,22 @@ Public Class Sphere
     End Function
 #End Region
 
+    ''' <summary>
+    ''' Orthogonal projection of the sphere to the plane
+    ''' </summary>
+    Public Function ProjectionTo(s As Plane3d) As Circle3d
+        Dim p As Point3d = Me.Center.ProjectionTo(s)
+        Return New Circle3d(p, Me.R, s.Normal)
+    End Function
+
+    ''' <summary>
+    ''' Orthogonal projection of the sphere to the line
+    ''' </summary>
+    Public Function ProjectionTo(l As Line3d) As Segment3d
+        Dim p As Point3d = Me.Center.ProjectionTo(l)
+        Return New Segment3d(p.Translate(Me.R * l.Direction.Normalized), p.Translate(-Me.R * l.Direction.Normalized))
+    End Function
+
 #Region "TranslateRotateReflect"
     ''' <summary>
     ''' Translate sphere by a vector

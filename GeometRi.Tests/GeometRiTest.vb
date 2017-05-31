@@ -1010,6 +1010,22 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.IsTrue(c1 = c2)
     End Sub
 
+    <TestMethod()> Public Sub SphereProjectionToPlaneTest()
+        Dim s As Sphere = New Sphere(New Point3d(-2, -2, -2), 5)
+        Dim p As Plane3d = New Plane3d(New Point3d(1, 1, 1), New Vector3d(1, 1, 1))
+        Dim c As Circle3d = s.ProjectionTo(p)
+        Dim res As Circle3d = New Circle3d(New Point3d(1, 1, 1), 5, New Vector3d(-1, -1, -1))
+        Assert.AreEqual(c, res)
+    End Sub
+
+    <TestMethod()> Public Sub SphereProjectionToLineTest()
+        Dim s As Sphere = New Sphere(New Point3d(-4, -3, -2), 5)
+        Dim l As Line3d = New Line3d(New Point3d(0, 0, 0), New Vector3d(4, 3, 0))
+        Dim c As Segment3d = s.ProjectionTo(l)
+        Dim res As Segment3d = New Segment3d(New Point3d(0, 0, 0), New Point3d(-8, -6, 0))
+        Assert.AreEqual(c, res)
+    End Sub
+
     '===============================================================
     ' Circle3d tests
     '===============================================================
