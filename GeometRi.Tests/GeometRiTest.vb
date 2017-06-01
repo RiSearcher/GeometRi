@@ -1041,4 +1041,45 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.IsTrue(Abs(c.R - 5) <= GeometRi3D.Tolerance)
     End Sub
 
+    '===============================================================
+    ' Triangle tests
+    '===============================================================
+
+    <TestMethod()> Public Sub TriangleEqualTest()
+        Dim p1 As Point3d = New Point3d(-3, 0, 4)
+        Dim p2 As Point3d = New Point3d(4, 0, 5)
+        Dim p3 As Point3d = New Point3d(1, 0, -4)
+
+        Dim t1 = New Triangle(p1, p2, p3)
+        Dim t2 = New Triangle(p1, p3, p2)
+        Dim t3 = New Triangle(p3, p2, p1)
+
+        Assert.AreEqual(t1, t2)
+        Assert.AreEqual(t1, t3)
+        Assert.AreEqual(t3, t2)
+    End Sub
+
+    <TestMethod()> Public Sub TriangleAreaTest()
+        Dim p1 As Point3d = New Point3d(0, 0, 0)
+        Dim p2 As Point3d = New Point3d(1, 0, 0)
+        Dim p3 As Point3d = New Point3d(0, 1, 0)
+
+        Dim t = New Triangle(p1, p2, p3)
+        Assert.IsTrue(Abs(t.Area - 0.5) < GeometRi3D.Tolerance)
+    End Sub
+
+    <TestMethod()> Public Sub TriangleBisectorTest()
+        Dim p1 As Point3d = New Point3d(0, 0, 0)
+        Dim p2 As Point3d = New Point3d(1, 0, 0)
+        Dim p3 As Point3d = New Point3d(0, 1, 0)
+        Dim t = New Triangle(p1, p2, p3)
+        Assert.AreEqual(t.Bisector_A, New Segment3d(p1, New Point3d(0.5, 0.5, 0)))
+
+        t = New Triangle(p2, p3, p1)
+        Assert.AreEqual(t.Bisector_C, New Segment3d(p1, New Point3d(0.5, 0.5, 0)))
+
+        t = New Triangle(p3, p1, p2)
+        Assert.AreEqual(t.Bisector_B, New Segment3d(p1, New Point3d(0.5, 0.5, 0)))
+    End Sub
+
 End Class
