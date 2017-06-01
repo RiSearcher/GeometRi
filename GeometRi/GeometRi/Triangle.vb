@@ -160,7 +160,7 @@ Public Class Triangle
     ''' </summary>
     Public ReadOnly Property Bisector_A As Segment3d
         Get
-            Dim p As Point3d = _b + (_c - _b) / (1 + AB / AC)
+            Dim p As Point3d = _b + (_c - _b) / (1 + AC / AB)
             Return New Segment3d(_a, p)
         End Get
     End Property
@@ -170,7 +170,7 @@ Public Class Triangle
     ''' </summary>
     Public ReadOnly Property Bisector_B As Segment3d
         Get
-            Dim p As Point3d = _a + (_c - _a) / (1 + AB / BC)
+            Dim p As Point3d = _c + (_a - _c) / (1 + AB / BC)
             Return New Segment3d(_b, p)
         End Get
     End Property
@@ -180,7 +180,7 @@ Public Class Triangle
     ''' </summary>
     Public ReadOnly Property Bisector_C As Segment3d
         Get
-            Dim p As Point3d = _a + (_b - _a) / (1 + AC / BC)
+            Dim p As Point3d = _a + (_b - _a) / (1 + BC / AC)
             Return New Segment3d(_c, p)
         End Get
     End Property
@@ -190,7 +190,8 @@ Public Class Triangle
     ''' </summary>
     Public ReadOnly Property Incenter As Point3d
         Get
-            Return Bisector_A.ToLine.PerpendicularTo(Bisector_B.ToLine)
+            'Return Bisector_A.ToLine.PerpendicularTo(Bisector_B.ToLine)
+            Return Bisector_C.ToLine.PerpendicularTo(Bisector_B.ToLine)
         End Get
     End Property
 

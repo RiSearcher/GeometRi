@@ -1082,4 +1082,13 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.AreEqual(t.Bisector_B, New Segment3d(p1, New Point3d(0.5, 0.5, 0)))
     End Sub
 
+    <TestMethod()> Public Sub TriangleIncenterTest()
+        Dim p1 As Point3d = New Point3d(0, 0, 0)
+        Dim p2 As Point3d = New Point3d(14, 0, 0)
+        Dim p3 As Point3d = New Point3d(5, 12, 0)
+
+        Dim t = New Triangle(p1, p2, p3)
+        Assert.AreEqual(t.Incenter, New Point3d(6, 4, 0))
+    End Sub
+
 End Class
