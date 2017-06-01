@@ -8,7 +8,7 @@ Public Class Sphere
     Private _r As Double
 
     Public Sub New(P As Point3d, R As Double)
-        _point = P
+        _point = P.Clone
         _r = R
     End Sub
 

@@ -49,7 +49,7 @@ Public Class Plane3d
         Dim v1 As Vector3d = New Vector3d(p1, p2)
         Dim v2 As Vector3d = New Vector3d(p1, p3)
         _normal = v1.Cross(v2)
-        _point = p1
+        _point = p1.Clone
     End Sub
 
     ''' <summary>
@@ -57,7 +57,7 @@ Public Class Plane3d
     ''' </summary>
     Public Sub New(p1 As Point3d, v1 As Vector3d, v2 As Vector3d)
         _normal = v1.Cross(v2)
-        _point = p1
+        _point = p1.Clone
     End Sub
 
     ''' <summary>
@@ -66,8 +66,8 @@ Public Class Plane3d
     ''' <param name="p1"></param>
     ''' <param name="v1"></param>
     Public Sub New(p1 As Point3d, v1 As Vector3d)
-        _normal = v1
-        _point = p1
+        _normal = v1.Clone
+        _point = p1.Clone
     End Sub
 #End Region
 

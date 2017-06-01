@@ -9,9 +9,9 @@ Public Class Circle3d
     Private _normal As Vector3d
 
     Public Sub New(Center As Point3d, Radius As Double, Normal As Vector3d)
-        _point = Center
+        _point = Center.Clone
         _r = Radius
-        _normal = Normal
+        _normal = Normal.Clone
     End Sub
 
     Public Sub New(p1 As Point3d, p2 As Point3d, p3 As Point3d)

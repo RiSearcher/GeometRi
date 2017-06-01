@@ -331,6 +331,16 @@ Public Class Point3d
     End Function
 #End Region
 
+    Public Shared Function CollinearPoints(A As Point3d, B As Point3d, C As Point3d) As Boolean
+        Dim v1 = New Vector3d(A, B)
+        Dim v2 = New Vector3d(A, C)
+        If v1.Cross(v2).Norm < GeometRi3D.Tolerance Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
     Public Overloads Overrides Function Equals(obj As Object) As Boolean
         If obj Is Nothing OrElse Not Me.GetType() Is obj.GetType() Then
             Return False
