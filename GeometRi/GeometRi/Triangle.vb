@@ -190,8 +190,7 @@ Public Class Triangle
     ''' </summary>
     Public ReadOnly Property Incenter As Point3d
         Get
-            'Return Bisector_A.ToLine.PerpendicularTo(Bisector_B.ToLine)
-            Return Bisector_C.ToLine.PerpendicularTo(Bisector_B.ToLine)
+            Return Bisector_A.ToLine.PerpendicularTo(Bisector_B.ToLine)
         End Get
     End Property
 
@@ -200,7 +199,7 @@ Public Class Triangle
     ''' </summary>
     Public ReadOnly Property Centroid As Point3d
         Get
-            Return Median_A.ToLine.PerpendicularTo(Median_B.ToLine)
+            Return New Point3d((A.X + B.X + C.X) / 3, (A.Y + B.Y + C.Y) / 3, (A.Z + B.Z + C.Z) / 3)
         End Get
     End Property
 

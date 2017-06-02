@@ -1091,4 +1091,31 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.AreEqual(t.Incenter, New Point3d(6, 4, 0))
     End Sub
 
+    <TestMethod()> Public Sub TriangleOrthocenterTest()
+        Dim p1 As Point3d = New Point3d(0, 0, 0)
+        Dim p2 As Point3d = New Point3d(14, 0, 0)
+        Dim p3 As Point3d = New Point3d(5, 1, 0)
+
+        Dim t = New Triangle(p1, p2, p3)
+        Assert.AreEqual(t.Orthocenter, New Point3d(5, 45, 0))
+    End Sub
+
+    <TestMethod()> Public Sub TriangleCentroidTest()
+        Dim p1 As Point3d = New Point3d(0, 0, 0)
+        Dim p2 As Point3d = New Point3d(14, 0, 0)
+        Dim p3 As Point3d = New Point3d(4, 12, 0)
+
+        Dim t = New Triangle(p1, p2, p3)
+        Assert.AreEqual(t.Centroid, New Point3d(6, 4, 0))
+    End Sub
+
+    <TestMethod()> Public Sub TriangleCircumcenterTest()
+        Dim p1 As Point3d = New Point3d(0, 0, 0)
+        Dim p2 As Point3d = New Point3d(14, 0, 0)
+        Dim p3 As Point3d = New Point3d(4, 12, 0)
+
+        Dim t = New Triangle(p1, p2, p3)
+        Assert.AreEqual(t.Circumcenter, New Point3d(7, 13 / 3, 0))
+    End Sub
+
 End Class
