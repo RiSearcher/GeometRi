@@ -15,6 +15,9 @@
         End Set
     End Property
 
+    ''' <summary>
+    ''' Tolerance based equality check
+    ''' </summary>
     Public Shared Function AlmostEqual(a As Double, b As Double) As Boolean
         If Math.Abs(a - b) <= _tolerance Then
             Return True
@@ -23,6 +26,9 @@
         End If
     End Function
 
+    ''' <summary>
+    ''' Tolerance based unequality check
+    ''' </summary>
     Public Shared Function NotEqual(a As Double, b As Double) As Boolean
         If Math.Abs(a - b) > _tolerance Then
             Return True
@@ -31,6 +37,9 @@
         End If
     End Function
 
+    ''' <summary>
+    ''' Tolerance based comparison
+    ''' </summary>
     Public Shared Function Greater(a As Double, b As Double) As Boolean
         If (a - b) > _tolerance Then
             Return True
@@ -39,6 +48,9 @@
         End If
     End Function
 
+    ''' <summary>
+    ''' Tolerance based comparison
+    ''' </summary>
     Public Shared Function Smaller(a As Double, b As Double) As Boolean
         If (a - b) < -_tolerance Then
             Return True

@@ -27,15 +27,16 @@ Install-Package GeometRi
 * __Point3d__ and __Vector3d__ are two base classes, representing points and vectors in 3D space.
 Objects of type Point3d or Vector3d can be defined in global or in local coordinate systems.
 
-* __Line3d__, __Ray3d__, __Segment3d__, __Plane3d__, __Circle3d__ and __Sphere__
+* __Line3d__, __Ray3d__, __Segment3d__, __Plane3d__, __Circle3d__, __Sphere__ and __Triangle__
 are compound classes, which are defined in terms of points and vectors.
 
 * __Coord3d__ and __Matrix3d__ are auxiliary classes.
 
 * __GeometRi3d__ is an abstract class, which defines some common functionality, for example global tolerance property (GeometRi3d.Tolerance)
-used in proximity operations by other classes.
+used in proximity operations by other classes. Implements tolerance based equality methods: AlmostEqual(double, double), NotEqual(double,double),
+Greater(double, double) and Smaller(double, double).
 
-#### Some common methods
+#### Some common methods implemented by other classess (when applicable)
 
 * __Translate(Vector3d)__ - translate object by given vector.
 
@@ -85,6 +86,20 @@ Represent ray in 3D space and is defined by starting point and direction vector.
 Defined by arbutrary point on the plane and a normal vector. 
 Optionally can be defined by coefficients in general equation of plane (Ax + By + Cz + D = 0), by three points
 or by point and two vectors in the plane.
+
+#### Sphere
+
+Defines a sphere in 3D space. Implements intersection with line, plane and other sphere methods, projection to line and plane, as well as
+common translation, rotation and reflection methods.
+
+#### Circle3d
+
+Defines a circle in 3D space. Implements common translation, rotation and reflection methods.
+
+#### Triangle
+
+Defines a triangle n 3D space. Implements common translation, rotation and reflection methods. Calculates most of the standard
+triangle properties: bisectors, meadians, altitudes, incenter, circumcenter, centroid, orthocenter, etc.
 
 #### Coord3d
 
