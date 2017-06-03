@@ -291,6 +291,72 @@ Public Class Triangle
     End Property
 #End Region
 
+#Region "TriangleProperties"
+    ''' <summary>
+    ''' True if all sides of the triangle are the same length
+    ''' </summary>
+    Public ReadOnly Property IsEquilateral As Boolean
+        Get
+            Return GeometRi3D.AlmostEqual(AB, AC) AndAlso GeometRi3D.AlmostEqual(AB, BC)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' True if two sides of the triangle are the same length
+    ''' </summary>
+    Public ReadOnly Property IsIsosceles As Boolean
+        Get
+            Return GeometRi3D.AlmostEqual(AB, AC) OrElse
+                   GeometRi3D.AlmostEqual(AB, BC) OrElse
+                   GeometRi3D.AlmostEqual(AC, BC)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' True if all sides are unequal
+    ''' </summary>
+    Public ReadOnly Property IsScalene As Boolean
+        Get
+            Return GeometRi3D.NotEqual(AB, AC) AndAlso
+                   GeometRi3D.NotEqual(AB, BC) AndAlso
+                   GeometRi3D.NotEqual(AC, BC)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' True if one angle is equal 90 degrees
+    ''' </summary>
+    Public ReadOnly Property IsRight As Boolean
+        Get
+            Return GeometRi3D.AlmostEqual(Angle_A, PI / 2) OrElse
+                   GeometRi3D.AlmostEqual(Angle_B, PI / 2) OrElse
+                   GeometRi3D.AlmostEqual(Angle_C, PI / 2)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' True if one angle is greater than 90 degrees
+    ''' </summary>
+    Public ReadOnly Property IsObtuse As Boolean
+        Get
+            Return GeometRi3D.Greater(Angle_A, PI / 2) OrElse
+                   GeometRi3D.Greater(Angle_B, PI / 2) OrElse
+                   GeometRi3D.Greater(Angle_C, PI / 2)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' True if all angles are less than 90 degrees
+    ''' </summary>
+    Public ReadOnly Property IsAcute As Boolean
+        Get
+            Return GeometRi3D.Smaller(Angle_A, PI / 2) AndAlso
+                   GeometRi3D.Smaller(Angle_B, PI / 2) AndAlso
+                   GeometRi3D.Smaller(Angle_C, PI / 2)
+        End Get
+    End Property
+#End Region
+
 #Region "TranslateRotateReflect"
     ''' <summary>
     ''' Translate triangle by a vector

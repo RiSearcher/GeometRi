@@ -2,7 +2,6 @@
 
     Private Shared _tolerance As Double = 0.000000000001
     Protected _coord As Coord3d
-    'Protected Shared ReadOnly _def_coord As Coord3d = Coord3d.GlobalCS
 
     ''' <summary>
     ''' Tolerance used for comparison operations
@@ -15,6 +14,38 @@
             _tolerance = value
         End Set
     End Property
+
+    Public Shared Function AlmostEqual(a As Double, b As Double) As Boolean
+        If Math.Abs(a - b) <= _tolerance Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Public Shared Function NotEqual(a As Double, b As Double) As Boolean
+        If Math.Abs(a - b) > _tolerance Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Public Shared Function Greater(a As Double, b As Double) As Boolean
+        If (a - b) > _tolerance Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Public Shared Function Smaller(a As Double, b As Double) As Boolean
+        If (a - b) < -_tolerance Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
 
 
     Public ReadOnly Property Coord As Coord3d
