@@ -1041,6 +1041,34 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.IsTrue(Abs(c.R - 5) <= GeometRi3D.Tolerance)
     End Sub
 
+    <TestMethod()> Public Sub CircleIntersectionWithPlaneTest()
+
+        ' parallel obecjts
+        Dim c = New Circle3d(New Point3d(5, 6, 1), 5, New Vector3d(0, 0, 1))
+        Dim s = New Plane3d(New Point3d(0, 0, 0), New Vector3d(0, 0, 1))
+        Assert.AreEqual(c.IntersectionWith(s), Nothing)
+
+        ' coplanar objects
+        s = New Plane3d(New Point3d(0, 0, 1), New Vector3d(0, 0, 1))
+        Assert.AreEqual(c.IntersectionWith(s), c)
+
+        ' nonintersecting objects
+        c = New Circle3d(New Point3d(5, 6, 10), 5, New Vector3d(0, 0, 1))
+        s = New Plane3d(New Point3d(0, 0, 1), New Vector3d(0, 0, 1))
+        Assert.AreEqual(c.IntersectionWith(s), Nothing)
+
+        ' intersection in one point
+        c = New Circle3d(New Point3d(0, 0, 3), 5, New Vector3d(3, 0, 4))
+        s = New Plane3d(New Point3d(5, 5, 0), New Vector3d(0, 0, 1))
+        Assert.AreEqual(c.IntersectionWith(s), New Point3d(4, 0, 0))
+
+        ' intersection in two points
+        c = New Circle3d(New Point3d(0, 0, 3), 5, New Vector3d(3, 0, 0))
+        s = New Plane3d(New Point3d(5, 5, 0), New Vector3d(0, 0, 1))
+        Assert.AreEqual(c.IntersectionWith(s), New Segment3d(New Point3d(0, 4, 0), New Point3d(0, -4, 0)))
+
+    End Sub
+
     '===============================================================
     ' Triangle tests
     '===============================================================

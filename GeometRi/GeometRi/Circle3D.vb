@@ -95,6 +95,42 @@ Public Class Circle3d
         End Get
     End Property
 
+    ''' <summary>
+    ''' Intersection of circle with plane.
+    ''' Returns object of type 'Nothing', 'Circle3d', 'Point3d' or 'Segment3d'.
+    ''' </summary>
+    Public Function IntersectionWith(s As Plane3d) As Object
+
+        If Me.Normal.IsParallelTo(s.Normal) Then
+
+            If Me.Center.BelongsTo(s) Then
+                ' coplanar objects
+                Return Me.Clone
+            Else
+                ' parallel objects
+                Return Nothing
+            End If
+        Else
+            Dim l As Line3d = s.IntersectionWith(New Plane3d(Me.Center, Me.Normal))
+            Dim local_coord As Coord3d = New Coord3d(Me.Center, l.Direction, Me.Normal.Cross(l.Direction))
+            Dim p As Point3d = l.Point.ConvertTo(local_coord)
+
+            If GeometRi3D.Greater(Abs(p.Y), Me.R) Then
+                Return Nothing
+            ElseIf GeometRi3D.AlmostEqual(p.Y, Me.R) Then
+                Return New Point3d(0, Me.R, 0, local_coord)
+            ElseIf GeometRi3D.AlmostEqual(p.Y, -Me.R) Then
+                Return New Point3d(0, -Me.R, 0, local_coord)
+            Else
+                Dim d As Double = Sqrt(Me.R ^ 2 - p.Y ^ 2)
+                Dim p1 = New Point3d(-d, p.Y, 0, local_coord)
+                Dim p2 = New Point3d(d, p.Y, 0, local_coord)
+                Return New Segment3d(p1, p2)
+            End If
+        End If
+
+    End Function
+
 #Region "TranslateRotateReflect"
     ''' <summary>
     ''' Translate circle by a vector

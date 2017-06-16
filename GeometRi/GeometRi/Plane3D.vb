@@ -237,6 +237,14 @@ Public Class Plane3d
         Return s.IntersectionWith(Me)
     End Function
 
+    ''' <summary>
+    ''' Intersection of circle with plane.
+    ''' Returns object of type 'Nothing', 'Circle3d', 'Point3d' or 'Segment3d'.
+    ''' </summary>
+    Public Function IntersectionWith(c As Circle3d)
+        Return c.IntersectionWith(Me)
+    End Function
+
 
 #Region "AngleTo"
     ''' <summary>

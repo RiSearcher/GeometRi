@@ -238,7 +238,7 @@ Public Class Triangle
     ''' </summary>
     Public ReadOnly Property Altitude_A As Segment3d
         Get
-            Dim p As Point3d = _a.ProjectionTo(New Segment3d(_b, _c).ToLine)
+            Dim p As Point3d = _a.ProjectionTo(New Line3d(_b, _c))
             Return New Segment3d(_a, p)
         End Get
     End Property
@@ -248,7 +248,7 @@ Public Class Triangle
     ''' </summary>
     Public ReadOnly Property Altitude_B As Segment3d
         Get
-            Dim p As Point3d = _b.ProjectionTo(New Segment3d(_a, _c).ToLine)
+            Dim p As Point3d = _b.ProjectionTo(New Line3d(_a, _c))
             Return New Segment3d(_b, p)
         End Get
     End Property
@@ -258,7 +258,7 @@ Public Class Triangle
     ''' </summary>
     Public ReadOnly Property Altitude_C As Segment3d
         Get
-            Dim p As Point3d = _c.ProjectionTo(New Segment3d(_a, _b).ToLine)
+            Dim p As Point3d = _c.ProjectionTo(New Line3d(_a, _b))
             Return New Segment3d(_c, p)
         End Get
     End Property
