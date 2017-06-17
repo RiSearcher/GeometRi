@@ -1069,6 +1069,11 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
     End Sub
 
+    <TestMethod()> Public Sub CircleParametricFormTest()
+        Dim c = New Circle3d(New Point3d(5, 6, 1), 5, New Vector3d(3, 0, 1))
+        Assert.IsTrue(c.ParametricForm(0.5).BelongsTo(c))
+    End Sub
+
     '===============================================================
     ' Triangle tests
     '===============================================================

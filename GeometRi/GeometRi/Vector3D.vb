@@ -326,6 +326,21 @@ Public Class Vector3d
         Return (Me * v) / (v * v) * v
     End Function
 
+    ''' <summary>
+    ''' Returns vector, orthogonal to the current vector
+    ''' </summary>
+    Public ReadOnly Property OrthogonalVector As Vector3d
+        Get
+            If Abs(Me.X) <= Abs(Me.Y) AndAlso Abs(Me.X) <= Abs(Me.Z) Then
+                Return New Vector3d(0, Me.Z, -Me.Y, Me.Coord)
+            ElseIf Abs(Me.Y) <= Abs(Me.X) AndAlso Abs(Me.Y) <= Abs(Me.Z) Then
+                Return New Vector3d(Me.Z, 0, -Me.X, Me.Coord)
+            Else
+                Return New Vector3d(Me.Y, -Me.X, 0, Me.Coord)
+            End If
+        End Get
+    End Property
+
 #Region "RotateReflect"
     ''' <summary>
     ''' Rotate vector by a given rotation matrix

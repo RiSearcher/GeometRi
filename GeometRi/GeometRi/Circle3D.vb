@@ -96,6 +96,18 @@ Public Class Circle3d
     End Property
 
     ''' <summary>
+    ''' Returns point on circle for given parameter 't' (0 &lt;= t &lt; 2Pi)
+    ''' </summary>
+    Public Function ParametricForm(t As Double) As Point3d
+
+        ' Get two orthogonal coplanar vectors
+        Dim v1 As Vector3d = _r * _normal.OrthogonalVector.Normalized
+        Dim v2 As Vector3d = _r * (_normal.Cross(v1)).Normalized
+        Return _point + v1.ToPoint * Cos(t) + v2.ToPoint * Sin(t)
+
+    End Function
+
+    ''' <summary>
     ''' Intersection of circle with plane.
     ''' Returns object of type 'Nothing', 'Circle3d', 'Point3d' or 'Segment3d'.
     ''' </summary>

@@ -274,11 +274,36 @@ Public Class Point3d
     End Function
 
     ''' <summary>
-    ''' Check if point belongs to the sphere
+    ''' Check if point belongs to the circle surface
     ''' </summary>
-    ''' <returns>True, if the point belongs to the sphere</returns>
+    ''' <returns>True, if the point belongs to the circle surface</returns>
+    Public Function BelongsTo(c As Circle3d) As Boolean
+        Return GeometRi3D.AlmostEqual(Me.DistanceTo(c.Center), c.R) AndAlso c.Normal.IsOrthogonalTo(New Vector3d(c.Center, Me))
+    End Function
+
+    ''' <summary>
+    ''' Check if point belongs to the sphere surface
+    ''' </summary>
+    ''' <returns>True, if the point belongs to the sphere surface</returns>
     Public Function BelongsTo(s As Sphere) As Boolean
-        Return Me.DistanceTo(s.Center) < s.R + Tolerance
+        Return GeometRi3D.AlmostEqual(Me.DistanceTo(s.Center), s.R)
+    End Function
+
+
+    ''' <summary>
+    ''' Check if point is inside circle
+    ''' </summary>
+    ''' <returns>True, if the point is inside circle</returns>
+    Public Function IsInside(c As Circle3d) As Boolean
+        Return Me.DistanceTo(c.Center) < c.R - Tolerance AndAlso c.Normal.IsOrthogonalTo(New Vector3d(c.Center, Me))
+    End Function
+
+    ''' <summary>
+    ''' Check if point is inside sphere
+    ''' </summary>
+    ''' <returns>True, if the point is inside sphere</returns>
+    Public Function IsInside(s As Sphere) As Boolean
+        Return Me.DistanceTo(s.Center) < s.R - Tolerance
     End Function
 
 #Region "TranslateRotateReflect"
