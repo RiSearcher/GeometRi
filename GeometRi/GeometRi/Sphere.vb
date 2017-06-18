@@ -300,9 +300,12 @@ Public Class Sphere
         Return s.Center = Me.Center AndAlso Abs(s.R - Me.R) <= GeometRi3D.Tolerance
     End Function
 
-    Public Overloads Function ToString() As String
+    Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
+        Dim p As Point3d = _point.ConvertToGlobal
+        If coord IsNot Nothing Then p = p.ConvertTo(coord)
+
         Dim str As String = String.Format("Sphere: ") + vbCrLf
-        str += String.Format("  Center -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", _point.X, _point.Y, _point.Z) + vbCrLf
+        str += String.Format("  Center -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", p.X, p.Y, p.Z) + vbCrLf
         str += String.Format("  Radius -> {0,10:g5}", _r)
         Return str
     End Function

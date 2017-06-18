@@ -95,6 +95,14 @@ Public Class Circle3d
         End Get
     End Property
 
+    Public ReadOnly Property ToEllipse As Ellipse
+        Get
+            Dim v1 As Vector3d = _r * _normal.OrthogonalVector.Normalized
+            Dim v2 As Vector3d = _r * (_normal.Cross(v1)).Normalized
+            Return New Ellipse(_point, v1, v2)
+        End Get
+    End Property
+
     ''' <summary>
     ''' Returns point on circle for given parameter 't' (0 &lt;= t &lt; 2Pi)
     ''' </summary>
@@ -198,11 +206,19 @@ Public Class Circle3d
                c.Normal.IsParallelTo(Me.Normal)
     End Function
 
-    Public Overloads Function ToString() As String
+    Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
+
+        Dim P As Point3d = _point.ConvertToGlobal
+        Dim normal As Vector3d = _normal.ConvertToGlobal
+        If coord IsNot Nothing Then
+            P = P.ConvertTo(coord)
+            normal = normal.ConvertTo(coord)
+        End If
+
         Dim str As String = String.Format("Circle: ") + vbCrLf
-        str += String.Format("  Center -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", _point.X, _point.Y, _point.Z) + vbCrLf
+        str += String.Format("  Center -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", P.X, P.Y, P.Z) + vbCrLf
         str += String.Format("  Radius -> {0,10:g5}", _r) + vbCrLf
-        str += String.Format("  Normal -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", _normal.X, _normal.Y, _normal.Z)
+        str += String.Format("  Normal -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", normal.X, normal.Y, normal.Z)
         Return str
     End Function
 
