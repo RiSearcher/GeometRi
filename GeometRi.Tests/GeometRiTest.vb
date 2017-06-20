@@ -1075,6 +1075,32 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     End Sub
 
     '===============================================================
+    ' Ellipse tests
+    '===============================================================
+
+    <TestMethod()> Public Sub PointBelongsToEllipseTest()
+        Dim v1 As Vector3d = New Vector3d(3, 0, 1)
+        Dim v2 As Vector3d = 3 * v1.OrthogonalVector
+        Dim e = New Ellipse(New Point3d(5, 6, 1), v1, v2)
+        Assert.IsTrue(e.ParametricForm(0.5).BelongsTo(e))
+    End Sub
+
+    <TestMethod()> Public Sub EllipseProjectionToPlaneTest()
+        Dim v1 As Vector3d = New Vector3d(3, 0, 1)
+        Dim v2 As Vector3d = 3 * v1.OrthogonalVector
+        Dim e = New Ellipse(New Point3d(5, 6, 1), v1, v2)
+        Dim s = New Plane3d(5, 2, 3, -3)
+
+        Dim p As Point3d = e.ParametricForm(0.5).ProjectionTo(s)
+        Assert.IsTrue(p.BelongsTo(e.ProjectionTo(s)))
+        p = e.ParametricForm(0.725).ProjectionTo(s)
+        Assert.IsTrue(p.BelongsTo(e.ProjectionTo(s)))
+        p = e.ParametricForm(2.7122).ProjectionTo(s)
+        Assert.IsTrue(p.BelongsTo(e.ProjectionTo(s)))
+    End Sub
+
+
+    '===============================================================
     ' Triangle tests
     '===============================================================
 

@@ -274,11 +274,27 @@ Public Class Point3d
     End Function
 
     ''' <summary>
-    ''' Check if point belongs to the circle surface
+    ''' Check if point belongs to the circle
     ''' </summary>
-    ''' <returns>True, if the point belongs to the circle surface</returns>
+    ''' <returns>True, if the point belongs to the circle</returns>
     Public Function BelongsTo(c As Circle3d) As Boolean
         Return GeometRi3D.AlmostEqual(Me.DistanceTo(c.Center), c.R) AndAlso c.Normal.IsOrthogonalTo(New Vector3d(c.Center, Me))
+    End Function
+
+    ''' <summary>
+    ''' Check if point belongs to the ellipse
+    ''' </summary>
+    ''' <returns>True, if the point belongs to the ellipse</returns>
+    Public Function BelongsTo(e As Ellipse) As Boolean
+        If Me.BelongsTo(New Plane3d(e.Center, e.MajorSemiaxis, e.MinorSemiaxis)) Then
+            If (Me.DistanceTo(e.F1) + Me.DistanceTo(e.F2) = 2 * e.A) Then
+                Return True
+            Else
+                Return False
+            End If
+        Else
+                Return False
+        End If
     End Function
 
     ''' <summary>
