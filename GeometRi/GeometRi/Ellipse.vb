@@ -46,6 +46,12 @@ Public Class Ellipse
         End Get
     End Property
 
+    Public ReadOnly Property Normal As Vector3d
+        Get
+            Return _v1.Cross(_v2)
+        End Get
+    End Property
+
     ''' <summary>
     ''' Length of the major semiaxis
     ''' </summary>
@@ -154,8 +160,67 @@ Public Class Ellipse
     Public Function Translate(v As Vector3d) As Ellipse
         Return New Ellipse(Me.Center.Translate(v), _v1, _v2)
     End Function
+
+    ''' <summary>
+    ''' Rotate ellipse by a given rotation matrix
+    ''' </summary>
+    Public Function Rotate(ByVal m As Matrix3d) As Ellipse
+        Return New Ellipse(Me.Center.Rotate(m), _v1.Rotate(m), _v2.Rotate(m))
+    End Function
+
+    ''' <summary>
+    ''' Rotate ellipse by a given rotation matrix around point 'p' as a rotation center
+    ''' </summary>
+    Public Function Rotate(m As Matrix3d, p As Point3d) As Ellipse
+        Return New Ellipse(Me.Center.Rotate(m, p), _v1.Rotate(m), _v2.Rotate(m))
+    End Function
+
+    ''' <summary>
+    ''' Reflect ellipse in given point
+    ''' </summary>
+    Public Function ReflectIn(p As Point3d) As Ellipse
+        Return New Ellipse(Me.Center.ReflectIn(p), _v1.ReflectIn(p), _v2.ReflectIn(p))
+    End Function
+
+    ''' <summary>
+    ''' Reflect ellipse in given line
+    ''' </summary>
+    Public Function ReflectIn(l As Line3d) As Ellipse
+        Return New Ellipse(Me.Center.ReflectIn(l), _v1.ReflectIn(l), _v2.ReflectIn(l))
+    End Function
+
+    ''' <summary>
+    ''' Reflect ellipse in given plane
+    ''' </summary>
+    Public Function ReflectIn(s As Plane3d) As Ellipse
+        Return New Ellipse(Me.Center.ReflectIn(s), _v1.ReflectIn(s), _v2.ReflectIn(s))
+    End Function
 #End Region
 
+    Public Overloads Overrides Function Equals(obj As Object) As Boolean
+        If obj Is Nothing OrElse Not Me.GetType() Is obj.GetType() Then
+            Return False
+        End If
+        Dim e As Ellipse = CType(obj, Ellipse)
+
+        If GeometRi3D.AlmostEqual(Me.A, Me.B) Then
+            ' Ellipse is circle
+            If GeometRi3D.AlmostEqual(e.A, e.B) Then
+                ' Second ellipse also circle
+                Return Me.Center = e.Center AndAlso
+                       GeometRi3D.AlmostEqual(Me.A, e.A) AndAlso
+                       e.Normal.IsParallelTo(Me.Normal)
+            Else
+                Return False
+            End If
+        Else
+            Return Me.Center = e.Center AndAlso
+                   GeometRi3D.AlmostEqual(Me.A, e.A) AndAlso
+                   GeometRi3D.AlmostEqual(Me.B, e.B) AndAlso
+                   e.MajorSemiaxis.IsParallelTo(Me.MajorSemiaxis) AndAlso
+                   e.MinorSemiaxis.IsParallelTo(Me.MinorSemiaxis)
+        End If
+    End Function
 
     Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
 
@@ -174,5 +239,15 @@ Public Class Ellipse
         str += String.Format("  Semiaxis B -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", v2.X, v2.Y, v2.Z) + vbCrLf
         Return str
     End Function
+
+    ' Operators overloads
+    '-----------------------------------------------------------------
+
+    Public Shared Operator =(c1 As Ellipse, c2 As Ellipse) As Boolean
+        Return c1.Equals(c2)
+    End Operator
+    Public Shared Operator <>(c1 As Ellipse, c2 As Ellipse) As Boolean
+        Return Not c1.Equals(c2)
+    End Operator
 
 End Class
