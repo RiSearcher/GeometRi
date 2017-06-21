@@ -287,7 +287,7 @@ Public Class Point3d
     ''' <returns>True, if the point belongs to the ellipse</returns>
     Public Function BelongsTo(e As Ellipse) As Boolean
         If Me.BelongsTo(New Plane3d(e.Center, e.MajorSemiaxis, e.MinorSemiaxis)) Then
-            If (Me.DistanceTo(e.F1) + Me.DistanceTo(e.F2) = 2 * e.A) Then
+            If (GeometRi3D.AlmostEqual(Me.DistanceTo(e.F1) + Me.DistanceTo(e.F2), 2 * e.A)) Then
                 Return True
             Else
                 Return False

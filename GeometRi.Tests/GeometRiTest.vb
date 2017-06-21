@@ -1074,6 +1074,32 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.IsTrue(c.ParametricForm(0.5).BelongsTo(c))
     End Sub
 
+    <TestMethod()> Public Sub CircleToEllipseTest()
+        Dim c = New Circle3d(New Point3d(5, 6, 1), 5, New Vector3d(3, 0, 1))
+        Dim e = c.ToEllipse
+
+        Assert.IsTrue(c.ParametricForm(0.5).BelongsTo(e))
+        Assert.IsTrue(c.ParametricForm(0.725).BelongsTo(e))
+        Assert.IsTrue(c.ParametricForm(2.7215).BelongsTo(e))
+
+        Assert.IsTrue(e.ParametricForm(0.5).BelongsTo(c))
+        Assert.IsTrue(e.ParametricForm(0.725).BelongsTo(c))
+        Assert.IsTrue(e.ParametricForm(2.7215).BelongsTo(c))
+    End Sub
+
+    <TestMethod()> Public Sub CircleProjectionToPlaneTest()
+        Dim v1 As Vector3d = New Vector3d(3, 5, 1)
+        Dim c = New Circle3d(New Point3d(5, 6, 1), 5, v1)
+        Dim s = New Plane3d(5, 2, 3, -3)
+
+        Dim p As Point3d = c.ParametricForm(0.5).ProjectionTo(s)
+        Assert.IsTrue(p.BelongsTo(c.ProjectionTo(s)))
+        p = c.ParametricForm(0.725).ProjectionTo(s)
+        Assert.IsTrue(p.BelongsTo(c.ProjectionTo(s)))
+        p = c.ParametricForm(2.7122).ProjectionTo(s)
+        Assert.IsTrue(p.BelongsTo(c.ProjectionTo(s)))
+    End Sub
+
     '===============================================================
     ' Ellipse tests
     '===============================================================

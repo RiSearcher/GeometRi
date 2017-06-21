@@ -116,6 +116,13 @@ Public Class Circle3d
     End Function
 
     ''' <summary>
+    ''' Orthogonal projection of the circle to plane
+    ''' </summary>
+    Public Function ProjectionTo(s As Plane3d) As Ellipse
+        Return Me.ToEllipse.ProjectionTo(s)
+    End Function
+
+    ''' <summary>
     ''' Intersection of circle with plane.
     ''' Returns object of type 'Nothing', 'Circle3d', 'Point3d' or 'Segment3d'.
     ''' </summary>
