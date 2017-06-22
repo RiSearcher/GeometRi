@@ -126,6 +126,22 @@ the vector will be defined in the same coordinate system as the first operand.
 #### Line3d 
 
 Represent infinite line  in 3D space and is defined by any point lying on the line and a direction vector.
+##### Properties
+* __Point__ - base point of the line
+* __Direction__ - direction vector of the line
+##### Methods
+* __Clone__ - deep copy of object
+* __DistanceTo__ - shortest distance to point, line, ray or segment
+* __PerpendicularTo__ - point on the perpendicular to the second line
+* __IntersectionWith__ - intersection of line with plane or sphere
+* __ProjectionTo__ - orthogonal projection of a line to the plane
+* __AngleTo__ - angle between line and other line or plane
+* __AngleToDeg__ - angle between line and other line or plane (in degrees)
+* __Translate__ - translate line by vector
+* __Rotate__ - rotate line around origin or other point
+* __Reflect__ - reflect line in point, line or plane
+* __Equals__ - check if two lines are equals
+* __ToString__ - string representation of line in global or local coordinate system
 
 #### Ray 3d
 
