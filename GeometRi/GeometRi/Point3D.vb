@@ -70,6 +70,9 @@ Public Class Point3d
         End Set
     End Property
 
+    ''' <summary>
+    ''' Radius vector of point
+    ''' </summary>
     Public ReadOnly Property ToVector As Vector3d
         Get
             Return New Vector3d(Me)

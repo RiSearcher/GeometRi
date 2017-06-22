@@ -39,25 +39,15 @@ Greater(double, double) and Smaller(double, double).
 #### Some common methods implemented by other classess (when applicable)
 
 * __Translate(Vector3d)__ - translate object by given vector.
-
 * __Rotate(Matrix3d, [Point3d])__ - rotate object by given rotation matrix (optionally rotate around given point).
-
 * __ReflectIn(obj)__ - reflect object in given point, line or plane.
-
 * __DistanceTo(obj)__ - distance to other object (point, line or plane).
-
 * __ProjectionTo(obj)__ - orthogonal projection of one object to another.
-
 * __IntersectionWith(obj)__ - intersection of two objects.
-
 * __AngleTo(obj)__ - angle between two objects (radians).
-
 * __AngleToDeg(obj)__ - angle between two objects (degrees).
-
 * __Clone()__ - creates copy of the object.
-
 * __ConvertTo(coord)__ - convers point or vector to local cordinate system.
-
 * __ConvertToGlobal()__ - convert point or vector to global coordinate system.
 
 #### Point3d
@@ -65,6 +55,36 @@ Greater(double, double) and Smaller(double, double).
 One of the base classes, can be constructed by three double numbers (X, Y and Z) or from double array.
 Each constructor has optional parameter 'coord' for local coordinate system in which point will be defined.
 By default all points are defined in global coordinate system.
+##### Properties
+* __X__ - X cordinate
+* __Y__ - Y cordinate
+* __Z__ - Z cordinate
+* __ToVector__ - radius vector of point
+##### Methods
+* __ConvertTo__ - convert point to local coordinate system
+* __ConvertToGlobal__ - convert point to global coordinate system
+* __Add__ - add two points
+* __Subtract__ - subtract one point from other
+* __Scale__ - scale point by given number
+* __DistanceTo__ - shortest distance from point to point, line, plane, ray or segment
+* __ProjectionTo__ - orthogonal projection of point to line, plane or sphere
+* __BelongsTo__ - check if point belongs to line, ray, segment, plane, circle, ellipse or sphere surface
+* __IsInside__ - check if point is inside circle or sphere
+* __Translate__ - translate point by vector
+* __Rotate__ - rotate point around origin or other point
+* __Reflect__ - reflect point in point, line or plane
+* __Equals__ - check if two points are equals
+* __ToString__ - string representation of point in global or local coordinate system
+##### Static methods
+* __CollinearPoints__ - check if three points are collinear
+##### Overloaded operators
+* __+__ - add two points
+* __-__ - subtract two points
+* __-__ - unary operator
+* __*__ - scale point by number
+* __/__ - scale point by number
+* __=__ - equality check
+* __<>__ - unequality check
 
 #### Vector3d
 
