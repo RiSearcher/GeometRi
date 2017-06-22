@@ -45,6 +45,9 @@ Public Class Point3d
         Return DirectCast(MemberwiseClone(), Point3d)
     End Function
 
+    ''' <summary>
+    ''' X coordinate in reference coordinate system
+    ''' </summary>
     Public Property X As Double
         Get
             Return _x
@@ -53,6 +56,9 @@ Public Class Point3d
             _x = value
         End Set
     End Property
+    ''' <summary>
+    ''' Y coordinate in reference coordinate system
+    ''' </summary>
     Public Property Y As Double
         Get
             Return _y
@@ -61,6 +67,9 @@ Public Class Point3d
             _y = value
         End Set
     End Property
+    ''' <summary>
+    ''' Z coordinate in reference coordinate system
+    ''' </summary>
     Public Property Z As Double
         Get
             Return _z
@@ -375,6 +384,9 @@ Public Class Point3d
     End Function
 #End Region
 
+    ''' <summary>
+    ''' Check if three points are collinear
+    ''' </summary>
     Public Shared Function CollinearPoints(A As Point3d, B As Point3d, C As Point3d) As Boolean
         Dim v1 = New Vector3d(A, B)
         Dim v2 = New Vector3d(A, C)
@@ -394,6 +406,10 @@ Public Class Point3d
         Return Me.DistanceTo(p) < Tolerance
     End Function
 
+
+    ''' <summary>
+    ''' String representation of point in global or local coordinate system
+    ''' </summary>
     Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
         Dim p As Point3d = Me.ConvertToGlobal
         If coord IsNot Nothing Then

@@ -56,11 +56,13 @@ One of the base classes, can be constructed by three double numbers (X, Y and Z)
 Each constructor has optional parameter 'coord' for local coordinate system in which point will be defined.
 By default all points are defined in global coordinate system.
 ##### Properties
-* __X__ - X cordinate
-* __Y__ - Y cordinate
-* __Z__ - Z cordinate
+* __X__ - X coordinate in reference coordinate system
+* __Y__ - Y coordinate in reference coordinate system
+* __Z__ - Z coordinate in reference coordinate system
+* __Coord__ - reference coordinate system
 * __ToVector__ - radius vector of point
 ##### Methods
+* __Clone__ - deep copy of object
 * __ConvertTo__ - convert point to local coordinate system
 * __ConvertToGlobal__ - convert point to global coordinate system
 * __Add__ - add two points
@@ -79,7 +81,7 @@ By default all points are defined in global coordinate system.
 * __CollinearPoints__ - check if three points are collinear
 ##### Overloaded operators
 * __+__ - add two points
-* __-__ - subtract two points
+* __-__ - subtract one point from other
 * __-__ - unary operator
 * __*__ - scale point by number
 * __/__ - scale point by number
@@ -92,6 +94,34 @@ Second base class, representing vector in 3D space. Constructed by three compone
 (with optional 'coord' parameter for local cordinate system). Additionally, can be constructed by point,
 representing radius vector of that point, or by two points, representing vector from first point to another. In this cases
 the vector will be defined in the same coordinate system as the first operand.
+##### Properties
+* __X__ - X component in reference coordinate system
+* __Y__ - Y component in reference coordinate system
+* __Z__ - Z component in reference coordinate system
+* __Coord__ - reference coordinate system
+* __Norm__ - Norm of a vector
+* __ToPoint__ - point, represented by vector starting in origin
+* __OrthogonalVector__ - return arbitrary vector, orthogonal to the current vector
+##### Methods
+* __Clone__ - deep copy of object
+* __ConvertTo__ - convert vector to local coordinate system
+* __ConvertToGlobal__ - convert vector to global coordinate system
+* __Normalize__ - normalize the current vector
+* __Normalized__ - return normalized vector
+* __IsParallelTo__ - check if two vectors are parallel
+* __IsNotParallelTo__ - check if two vectors are NOT parallel
+* __IsOrthogonalTo__ - check if two vectors are orthogonal
+* __Add__ - overloaded, add number or vector
+* __Subtract__ - oveloaded, subtract number or vector
+* __Mult__ - overloaded, multiply by number or vector
+* __Dot__ - dot product of two vectors
+* __AngleTo__ - angle between vector and other vector, line, plane, ray or segment
+* __AngleToDeg__ - angle between vector and other vector, line, plane, ray or segment (in degrees)
+* __ProjectionTo__ - return projection of the current vector to the second vector
+* __Rotate__ - rotate vector around origin
+* __Reflect__ - reflect vector in point, line or plane
+* __Equals__ - check if two vectors are equals
+* __ToString__ - string representation of vector in global or local coordinate system
 
 #### Line3d 
 

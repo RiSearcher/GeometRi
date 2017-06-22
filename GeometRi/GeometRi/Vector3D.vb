@@ -70,6 +70,9 @@ Public Class Vector3d
         End Set
     End Property
 
+    ''' <summary>
+    ''' X component in reference coordinate system
+    ''' </summary>
     Public Property X As Double
         Get
             Return val(0)
@@ -78,6 +81,10 @@ Public Class Vector3d
             val(0) = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' Y component in reference coordinate system
+    ''' </summary>
     Public Property Y As Double
         Get
             Return val(1)
@@ -86,6 +93,10 @@ Public Class Vector3d
             val(1) = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' Z component in reference coordinate system
+    ''' </summary>
     Public Property Z As Double
         Get
             Return val(2)
@@ -95,12 +106,18 @@ Public Class Vector3d
         End Set
     End Property
 
+    ''' <summary>
+    ''' Norm of a vector
+    ''' </summary>
     Public ReadOnly Property Norm As Double
         Get
             Return Sqrt(val(0) ^ 2 + val(1) ^ 2 + val(2) ^ 2)
         End Get
     End Property
 
+    ''' <summary>
+    ''' Point, represented by vector starting in origin
+    ''' </summary>
     Public ReadOnly Property ToPoint As Point3d
         Get
             Return New Point3d(val(0), val(1), val(2), _coord)
@@ -118,9 +135,8 @@ Public Class Vector3d
     End Sub
 
     ''' <summary>
-    ''' Returns normalized vector
+    ''' Return normalized vector
     ''' </summary>
-    ''' <returns></returns>
     Public Function Normalized() As Vector3d
         Dim tmp As Vector3d = Me.Clone
         Dim tmp_norm As Double = Me.Norm
@@ -133,8 +149,6 @@ Public Class Vector3d
     ''' <summary>
     ''' Check if two vectors are parallel
     ''' </summary>
-    ''' <param name="v"></param>
-    ''' <returns></returns>
     Public Function IsParallelTo(v As Vector3d) As Boolean
         If (Me._coord <> v._coord) Then v = v.ConvertTo(Me._coord)
         Return Me.Cross(v).Norm < Tolerance
@@ -143,8 +157,6 @@ Public Class Vector3d
     ''' <summary>
     ''' Check if two vectors are NOT parallel
     ''' </summary>
-    ''' <param name="v"></param>
-    ''' <returns></returns>
     Public Function IsNotParallelTo(v As Vector3d) As Boolean
         If (Me._coord <> v._coord) Then v = v.ConvertTo(Me._coord)
         Return Me.Cross(v).Norm >= Tolerance
@@ -153,8 +165,6 @@ Public Class Vector3d
     ''' <summary>
     ''' Check if two vectors are orthogonal
     ''' </summary>
-    ''' <param name="v"></param>
-    ''' <returns></returns>
     Public Function IsOrthogonalTo(v As Vector3d) As Boolean
         If (Me._coord <> v._coord) Then v = v.ConvertTo(Me._coord)
         Return Abs(Me * v) < Tolerance
@@ -198,11 +208,17 @@ Public Class Vector3d
         Return tmp
     End Function
 
+    ''' <summary>
+    ''' Dot product of two vectors
+    ''' </summary>
     Public Function Dot(ByVal v As Vector3d) As Double
         If (Me._coord <> v._coord) Then v = v.ConvertTo(Me._coord)
         Return Me.val(0) * v.val(0) + Me.val(1) * v.val(1) + Me.val(2) * v.val(2)
     End Function
 
+    ''' <summary>
+    ''' Cross product of two vectors
+    ''' </summary>
     Public Function Cross(ByVal v As Vector3d) As Vector3d
         If (Me._coord <> v._coord) Then v = v.ConvertTo(Me._coord)
         Dim tmp As Vector3d = New Vector3d(0, 0, 0, _coord)
@@ -319,7 +335,7 @@ Public Class Vector3d
 #End Region
 
     ''' <summary>
-    ''' Returns projection of the current vector to the second vector
+    ''' Return projection of the current vector to the second vector
     ''' </summary>
     Public Function ProjectionTo(v As Vector3d) As Vector3d
         If (Me._coord <> v._coord) Then v = v.ConvertTo(Me._coord)
@@ -327,7 +343,7 @@ Public Class Vector3d
     End Function
 
     ''' <summary>
-    ''' Returns vector, orthogonal to the current vector
+    ''' Return arbitrary vector, orthogonal to the current vector
     ''' </summary>
     Public ReadOnly Property OrthogonalVector As Vector3d
         Get
