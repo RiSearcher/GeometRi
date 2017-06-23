@@ -313,3 +313,33 @@ triangle properties: bisectors, meadians, altitudes, incenter, circumcenter, cen
 Class representing orthogonal cartesian 3D coordinate system. Defined by an origin point and transformation matrix
 (three orthogonal unit vectors stored in row format). One global coordinate system (Coord3d.GlobalCS) is defined by default,
 any number of local coordinate systems can be defined by users.
+### Properties
+* __Origin__ - origin of the coordinate system
+* __Axes__ - unit vectors of the axes, stored as row-matrix(3x3)
+* __Name__ - name of the coordinate system
+* __Counts__ - total number of defined coordinate systems
+* __X/Y/Zaxis__ - X/Y/Z-axis of the coordinate system
+* __XY/XZ/YZ_plane__ - planes of the coordinate system
+### Methods
+* __Clone__ - deep copy of object
+* __Rotate/RotateDeg__ - rotate coordinate system around rotation axis
+* __Equals__ - check if two coordinate systems are equals
+* __ToString__ - string representation of coordinate system
+
+## Matrix3d
+
+### Properties
+* __Item(i,j)__ - element of the matrix
+* __Row1/2/3__ - rows of the matrix
+* __Column1/2/3__ - columns of the matrix
+* __Det__ - determinant of the matrix
+* __MaxNorm__ - Max norm of the matrix
+* __IsZero__ - check if matrix is zero matrix
+* __IsIdentity__ - check if matrix is identity matrix
+* __IsOrthogonal__ - check if matrix is orthogonal
+### Methods
+* __Inverse__ - inverse of the matrix
+* __Transpose__ - transpose of the matrix
+* __RotationMatrix__ - rotation around given axis
+* __Equals__ - check if two matrix are equals
+* __ToString__ - string representation of matrix

@@ -148,7 +148,7 @@ Public Class Coord3d
     End Property
 
     ''' <summary>
-    ''' Get total number of coordinate systems
+    ''' Get total number of defined coordinate systems
     ''' </summary>
     Public Shared ReadOnly Property Counts As Integer
         Get
