@@ -80,7 +80,7 @@ Public Class Plane3d
     End Function
 
     ''' <summary>
-    ''' Point of the plane
+    ''' Point on the plane
     ''' </summary>
     ''' <returns></returns>
     Public Property Point As Point3d
@@ -105,25 +105,43 @@ Public Class Plane3d
         End Set
     End Property
 
+    ''' <summary>
+    ''' Set reference coordinate system for general plane equation
+    ''' </summary>
     Public Sub SetCoord(coord As Coord3d)
         _coord = coord
     End Sub
 
+    ''' <summary>
+    ''' Coefficient A in the general plane equation
+    ''' </summary>
     Public ReadOnly Property A As Double
         Get
             A = _normal.ConvertTo(_coord).X
         End Get
     End Property
+
+    ''' <summary>
+    ''' Coefficient B in the general plane equation
+    ''' </summary>
     Public ReadOnly Property B As Double
         Get
             B = _normal.ConvertTo(_coord).Y
         End Get
     End Property
+
+    ''' <summary>
+    ''' Coefficient C in the general plane equation
+    ''' </summary>
     Public ReadOnly Property C As Double
         Get
             C = _normal.ConvertTo(_coord).Z
         End Get
     End Property
+
+    ''' <summary>
+    ''' Coefficient D in the general plane equation
+    ''' </summary>
     Public ReadOnly Property D As Double
         Get
             Dim p As Point3d = _point.ConvertTo(_coord)

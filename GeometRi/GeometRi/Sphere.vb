@@ -34,9 +34,9 @@ Public Class Sphere
     End Property
 
     ''' <summary>
-    ''' X component of the spheres center
+    ''' X component of the spheres' center
     ''' </summary>
-    Public Property X As Double
+    Private Property X As Double
         Get
             Return _point.X
         End Get
@@ -46,9 +46,9 @@ Public Class Sphere
     End Property
 
     ''' <summary>
-    ''' Y component of the spheres center
+    ''' Y component of the spheres' center
     ''' </summary>
-    Public Property Y As Double
+    Private Property Y As Double
         Get
             Return _point.Y
         End Get
@@ -58,9 +58,9 @@ Public Class Sphere
     End Property
 
     ''' <summary>
-    ''' Z component of the spheres center
+    ''' Z component of the spheres' center
     ''' </summary>
-    Public Property Z As Double
+    Private Property Z As Double
         Get
             Return _point.Z
         End Get
