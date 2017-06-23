@@ -252,11 +252,61 @@ Defines a circle in 3D space. Implements common translation, rotation and reflec
 ## Ellipse
 
 Defines an ellipse in 3D space, represented by center point and two vectors, for major and minor semiaxes.
+### Properties
+* __Center__ - center of the ellipse
+* __MajorSemiaxis__ - major semiaxis of the ellipse
+* __MinorSemiaxis__ - minor semiaxis of the ellipse
+* __Normal__ - normal of the ellipse
+* __A__ - length of major semiaxis
+* __B__ - length of minor semiaxis
+* __F__ - distance from center to focus
+* __F1__ - first focus
+* __F2__ - second focus
+* __e__ - eccentricity of the ellipse
+* __Perimeter__ - approximate circumference of the ellipse
+* __Area__ - area of the ellipse
+### Methods
+* __Clone__ - deep copy of object
+* __ParametricForm__ - return point on ellipse for given parameter 't'
+* __ProjectionTo__ - orthogonal projection of ellipse to plane
+* __Translate__ - translate ellipse by vector
+* __Rotate__ - rotate ellipse around origin or other point
+* __Reflect__ - reflect ellipse in point, line or plane
+* __Equals__ - check if two ellipses are equals
+* __ToString__ - string representation of ellipse in global or local coordinate system
 
 ## Triangle
 
 Defines a triangle n 3D space. Implements common translation, rotation and reflection methods. Calculates most of the standard
 triangle properties: bisectors, meadians, altitudes, incenter, circumcenter, centroid, orthocenter, etc.
+### Properties
+* __A/B/C__ - vertices of the triangle
+* __AB/AC/BC__ - length of the triangles' sides
+* __Perimeter__ - perimeter of the triangle
+* __Area__ - area of the triangle
+* __Circumcircle__ - circumcircle of the triangle
+* __Angle_A/B/C__ - angle at the vertex A/B/C
+* __Bisector_A/B/C__ - angle bisector at the vertex A/B/C
+* __Incenter__ - incenter of the triangle
+* __Centroid__ - centroid of the triangle
+* __Orthocenter__ - orthocenter of the triangle
+* __Circumcenter__ - circumcenter of the triangle
+* __Incircle__ - incircle of the triangle
+* __Altitude_A/B/C__ - altitude at the vertex A/B/C
+* __Median_A/B/C__ - median at the vertex A/B/C
+* __IsEquilateral__ - check if all sides of the triangle are the same length
+* __IsIsosceles__ - check if two sides of the triangle are the same length
+* __IsScalene__ - check if all sides are unequal
+* __IsRight__ - check if one angle is equal 90 degrees
+* __IsObtuse__ - check if one angle is greater than 90 degrees
+* __IsAcute__ - check if all angles are less than 90 degrees
+### Methods
+* __Clone__ - deep copy of object
+* __Translate__ - translate triangle by vector
+* __Rotate__ - rotate triangle around origin or other point
+* __Reflect__ - reflect triangle in point, line or plane
+* __Equals__ - check if two triangles are equals
+* __ToString__ - string representation of triangle in global or local coordinate system
 
 ## Coord3d
 
