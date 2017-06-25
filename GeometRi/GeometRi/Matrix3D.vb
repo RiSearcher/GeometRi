@@ -185,9 +185,9 @@ Public Class Matrix3d
     End Function
     Public Function Mult(ByVal a As Vector3d) As Vector3d
         Dim b As Vector3d = New Vector3d(0, 0, 0)
-        b.val(0) = val(0, 0) * a.val(0) + val(0, 1) * a.val(1) + val(0, 2) * a.val(2)
-        b.val(1) = val(1, 0) * a.val(0) + val(1, 1) * a.val(1) + val(1, 2) * a.val(2)
-        b.val(2) = val(2, 0) * a.val(0) + val(2, 1) * a.val(1) + val(2, 2) * a.val(2)
+        b(0) = val(0, 0) * a(0) + val(0, 1) * a(1) + val(0, 2) * a(2)
+        b(1) = val(1, 0) * a(0) + val(1, 1) * a(1) + val(1, 2) * a(2)
+        b(2) = val(2, 0) * a(0) + val(2, 1) * a(1) + val(2, 2) * a(2)
         Return b
     End Function
     Public Function Mult(ByVal p As Point3d) As Point3d

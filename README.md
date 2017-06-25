@@ -36,20 +36,6 @@ are compound classes, which are defined in terms of points and vectors.
 used in proximity operations by other classes. Implements tolerance based equality methods: AlmostEqual(double, double), NotEqual(double,double),
 Greater(double, double) and Smaller(double, double).
 
-### Some common methods implemented by other classess (when applicable)
-
-* __Translate(Vector3d)__ - translate object by given vector.
-* __Rotate(Matrix3d, [Point3d])__ - rotate object by given rotation matrix (optionally rotate around given point).
-* __ReflectIn(obj)__ - reflect object in given point, line or plane.
-* __DistanceTo(obj)__ - distance to other object (point, line or plane).
-* __ProjectionTo(obj)__ - orthogonal projection of one object to another.
-* __IntersectionWith(obj)__ - intersection of two objects.
-* __AngleTo(obj)__ - angle between two objects (radians).
-* __AngleToDeg(obj)__ - angle between two objects (degrees).
-* __Clone()__ - creates copy of the object.
-* __ConvertTo(coord)__ - convers point or vector to local cordinate system.
-* __ConvertToGlobal()__ - convert point or vector to global coordinate system.
-
 ## Point3d
 
 One of the base classes, can be constructed by three double numbers (X, Y and Z) or from double array.
@@ -343,3 +329,13 @@ any number of local coordinate systems can be defined by users.
 * __RotationMatrix__ - rotation around given axis
 * __Equals__ - check if two matrix are equals
 * __ToString__ - string representation of matrix
+
+## GeometRi3D
+
+### Properties
+* __Tolerance__ - tolerance used for comparison operations (default 1e-12)
+### Methods
+* __AlmostEqual__ - tolerance based equality check
+* __NotEqual__ - tolerance based unequality check
+* __Greater__ - tolerance based comparison
+* __Smaller__ - tolerance based comparison

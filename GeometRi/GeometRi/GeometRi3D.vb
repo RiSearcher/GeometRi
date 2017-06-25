@@ -1,10 +1,9 @@
 ﻿Public MustInherit Class GeometRi3D
 
     Private Shared _tolerance As Double = 0.000000000001
-    Protected _coord As Coord3d
 
     ''' <summary>
-    ''' Tolerance used for comparison operations
+    ''' Tolerance used for comparison operations (default 1e-12)
     ''' </summary>
     Public Shared Property Tolerance As Double
         Get
@@ -59,16 +58,5 @@
         End If
     End Function
 
-
-    Public ReadOnly Property Coord As Coord3d
-        Get
-            Coord = _coord
-        End Get
-    End Property
-    Public ReadOnly Property CoordName As String
-        Get
-            CoordName = _coord.Name
-        End Get
-    End Property
 
 End Class

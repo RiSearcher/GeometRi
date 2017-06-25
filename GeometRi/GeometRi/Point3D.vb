@@ -1,10 +1,10 @@
 ﻿Imports System.Math
 
 Public Class Point3d
-    Inherits GeometRi3D
     Implements ICloneable
 
     Private _x, _y, _z As Double
+    Private _coord As Coord3d
 
 #Region "Constructors"
     Public Sub New(Optional coord As Coord3d = Nothing)
@@ -77,6 +77,15 @@ Public Class Point3d
         Set(value As Double)
             _z = value
         End Set
+    End Property
+
+    ''' <summary>
+    '''  Reference coordinate system
+    ''' </summary>
+    Public ReadOnly Property Coord As Coord3d
+        Get
+            Coord = _coord
+        End Get
     End Property
 
     ''' <summary>
@@ -282,7 +291,7 @@ Public Class Point3d
     ''' <returns>True, if the point belongs to the plane</returns>
     Public Function BelongsTo(s As Plane3d) As Boolean
         s.SetCoord(Me.Coord)
-        Return Abs(s.A * X + s.B * Y + s.C * Z + s.D) < Tolerance
+        Return Abs(s.A * X + s.B * Y + s.C * Z + s.D) < GeometRi3D.Tolerance
     End Function
 
     ''' <summary>
@@ -305,7 +314,7 @@ Public Class Point3d
                 Return False
             End If
         Else
-                Return False
+            Return False
         End If
     End Function
 
@@ -323,7 +332,7 @@ Public Class Point3d
     ''' </summary>
     ''' <returns>True, if the point is inside circle</returns>
     Public Function IsInside(c As Circle3d) As Boolean
-        Return Me.DistanceTo(c.Center) < c.R - Tolerance AndAlso c.Normal.IsOrthogonalTo(New Vector3d(c.Center, Me))
+        Return Me.DistanceTo(c.Center) < c.R - GeometRi3D.Tolerance AndAlso c.Normal.IsOrthogonalTo(New Vector3d(c.Center, Me))
     End Function
 
     ''' <summary>
@@ -331,7 +340,7 @@ Public Class Point3d
     ''' </summary>
     ''' <returns>True, if the point is inside sphere</returns>
     Public Function IsInside(s As Sphere) As Boolean
-        Return Me.DistanceTo(s.Center) < s.R - Tolerance
+        Return Me.DistanceTo(s.Center) < s.R - GeometRi3D.Tolerance
     End Function
 
 #Region "TranslateRotateReflect"
@@ -403,7 +412,7 @@ Public Class Point3d
         End If
         Dim p As Point3d = CType(obj, Point3d)
         If (Me._coord <> p.Coord) Then p = p.ConvertTo(_coord)
-        Return Me.DistanceTo(p) < Tolerance
+        Return Me.DistanceTo(p) < GeometRi3D.Tolerance
     End Function
 
 

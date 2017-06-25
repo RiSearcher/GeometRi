@@ -1,10 +1,10 @@
 ﻿Imports System.Math
 
 Public Class Vector3d
-    Inherits GeometRi3D
     Implements ICloneable
 
-    Public val(2) As Double
+    Private val(2) As Double
+    Private _coord As Coord3d
 
 #Region "Constructors"
     Public Sub New(Optional coord As Coord3d = Nothing)
@@ -116,6 +116,15 @@ Public Class Vector3d
     End Property
 
     ''' <summary>
+    '''  Reference coordinate system
+    ''' </summary>
+    Public ReadOnly Property Coord As Coord3d
+        Get
+            Coord = _coord
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Point, represented by vector starting in origin
     ''' </summary>
     Public ReadOnly Property ToPoint As Point3d
@@ -151,7 +160,7 @@ Public Class Vector3d
     ''' </summary>
     Public Function IsParallelTo(v As Vector3d) As Boolean
         If (Me._coord <> v._coord) Then v = v.ConvertTo(Me._coord)
-        Return Me.Cross(v).Norm < Tolerance
+        Return Me.Cross(v).Norm < GeometRi3D.Tolerance
     End Function
 
     ''' <summary>
@@ -159,7 +168,7 @@ Public Class Vector3d
     ''' </summary>
     Public Function IsNotParallelTo(v As Vector3d) As Boolean
         If (Me._coord <> v._coord) Then v = v.ConvertTo(Me._coord)
-        Return Me.Cross(v).Norm >= Tolerance
+        Return Me.Cross(v).Norm >= GeometRi3D.Tolerance
     End Function
 
     ''' <summary>
@@ -167,7 +176,7 @@ Public Class Vector3d
     ''' </summary>
     Public Function IsOrthogonalTo(v As Vector3d) As Boolean
         If (Me._coord <> v._coord) Then v = v.ConvertTo(Me._coord)
-        Return Abs(Me * v) < Tolerance
+        Return Abs(Me * v) < GeometRi3D.Tolerance
     End Function
 
     Public Function Add(ByVal a As Double) As Vector3d
@@ -397,7 +406,7 @@ Public Class Vector3d
         End If
         Dim v As Vector3d = CType(obj, Vector3d)
         If (Me._coord <> v.Coord) Then v = v.ConvertTo(_coord)
-        Return Abs(Me.X - v.X) < Tolerance AndAlso Abs(Me.Y - v.Y) < Tolerance AndAlso Abs(Me.Y - v.Y) < Tolerance
+        Return Abs(Me.X - v.X) < GeometRi3D.Tolerance AndAlso Abs(Me.Y - v.Y) < GeometRi3D.Tolerance AndAlso Abs(Me.Y - v.Y) < GeometRi3D.Tolerance
     End Function
 
     Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
