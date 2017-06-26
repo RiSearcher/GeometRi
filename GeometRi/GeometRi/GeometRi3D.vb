@@ -58,5 +58,20 @@
         End If
     End Function
 
+    Friend Shared Function HashFunction(n1 As Integer, n2 As Integer) As Integer
+        Return (n1 << 4) Xor (n1 >> 28) Xor n2
+    End Function
+
+    Friend Shared Function HashFunction(n1 As Integer, n2 As Integer, n3 As Integer) As Integer
+        n1 = (n1 << 4) Xor (n1 >> 28) Xor n2
+        Return (n1 << 4) Xor (n1 >> 28) Xor n3
+    End Function
+
+    Friend Shared Function HashFunction(n1 As Integer, n2 As Integer, n3 As Integer, n4 As Integer) As Integer
+        n1 = (n1 << 4) Xor (n1 >> 28) Xor n2
+        n1 = (n1 << 4) Xor (n1 >> 28) Xor n3
+        Return (n1 << 4) Xor (n1 >> 28) Xor n4
+    End Function
+
 
 End Class

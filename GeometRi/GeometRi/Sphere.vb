@@ -300,6 +300,10 @@ Public Class Sphere
         Return s.Center = Me.Center AndAlso Abs(s.R - Me.R) <= GeometRi3D.Tolerance
     End Function
 
+    Public Overrides Function GetHashCode() As Integer
+        Return GeometRi3D.HashFunction(_point.GetHashCode, _r.GetHashCode)
+    End Function
+
     Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
         Dim p As Point3d = _point.ConvertToGlobal
         If coord IsNot Nothing Then p = p.ConvertTo(coord)

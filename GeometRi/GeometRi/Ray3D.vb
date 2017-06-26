@@ -269,6 +269,10 @@ Public Class Ray3d
         Return Me.Point = r.Point AndAlso Abs(Me.Direction.Normalized * r.Direction.Normalized - 1) < GeometRi3D.Tolerance
     End Function
 
+    Public Overrides Function GetHashCode() As Integer
+        Return GeometRi3D.HashFunction(_point.GetHashCode, _dir.GetHashCode)
+    End Function
+
     Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
         Dim str As New System.Text.StringBuilder
         Dim P As Point3d = _point.ConvertToGlobal

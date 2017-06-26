@@ -270,6 +270,10 @@ Public Class Line3d
         Return Me.Point.BelongsTo(l) AndAlso Me.Direction.IsParallelTo(l.Direction)
     End Function
 
+    Public Overrides Function GetHashCode() As Integer
+        Return GeometRi3D.HashFunction(_point.GetHashCode, _dir.GetHashCode)
+    End Function
+
     Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
         Dim str As New System.Text.StringBuilder
         Dim P As Point3d = _point.ConvertToGlobal

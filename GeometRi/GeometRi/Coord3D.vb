@@ -236,6 +236,10 @@ Public Class Coord3d
         Return Me._name = cs._name
     End Function
 
+    Public Overrides Function GetHashCode() As Integer
+        Return _name.GetHashCode
+    End Function
+
     Public Overrides Function ToString() As String
         Dim str As New System.Text.StringBuilder
         str.Append("Coord3d: " + _name + vbCrLf)

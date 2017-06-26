@@ -416,6 +416,10 @@ Public Class Triangle
         End If
     End Function
 
+    Public Overrides Function GetHashCode() As Integer
+        Return GeometRi3D.HashFunction(_a.GetHashCode, _b.GetHashCode, _c.GetHashCode)
+    End Function
+
     Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
         Dim str As New System.Text.StringBuilder
         Dim A, B, C As Point3d

@@ -283,6 +283,10 @@ Public Class Matrix3d
         Return (Me - m).MaxNorm < GeometRi3D.Tolerance
     End Function
 
+    Public Overrides Function GetHashCode() As Integer
+        Return GeometRi3D.HashFunction(Row1.GetHashCode, Row2.GetHashCode, Row3.GetHashCode)
+    End Function
+
     Public Overrides Function ToString() As String
         Return String.Format("Row1 -> ({0,10:g5}, {1,10:g5}, {2,10:g5})", val(0, 0), val(0, 1), val(0, 2)) +
                 vbCrLf +

@@ -336,6 +336,10 @@ Public Class Segment3d
         Return (Me.P1 = s.P1 AndAlso Me.P2 = s.P2) Or (Me.P1 = s.P2 AndAlso Me.P2 = s.P1)
     End Function
 
+    Public Overrides Function GetHashCode() As Integer
+        Return GeometRi3D.HashFunction(_p1.GetHashCode, _p2.GetHashCode)
+    End Function
+
     Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
         Dim str As New System.Text.StringBuilder
         Dim p1 As Point3d = _p1.ConvertToGlobal

@@ -409,6 +409,10 @@ Public Class Vector3d
         Return Abs(Me.X - v.X) < GeometRi3D.Tolerance AndAlso Abs(Me.Y - v.Y) < GeometRi3D.Tolerance AndAlso Abs(Me.Y - v.Y) < GeometRi3D.Tolerance
     End Function
 
+    Public Overrides Function GetHashCode() As Integer
+        Return GeometRi3D.HashFunction(val(0), val(1), val(2), _coord.GetHashCode)
+    End Function
+
     Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
         Dim v As Vector3d = Me.ConvertToGlobal
         If coord IsNot Nothing Then

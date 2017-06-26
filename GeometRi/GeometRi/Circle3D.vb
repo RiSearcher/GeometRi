@@ -213,6 +213,10 @@ Public Class Circle3d
                c.Normal.IsParallelTo(Me.Normal)
     End Function
 
+    Public Overrides Function GetHashCode() As Integer
+        Return GeometRi3D.HashFunction(_point.GetHashCode, _r.GetHashCode, _normal.GetHashCode)
+    End Function
+
     Public Overloads Function ToString(Optional coord As Coord3d = Nothing) As String
 
         Dim P As Point3d = _point.ConvertToGlobal

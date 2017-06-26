@@ -415,6 +415,10 @@ Public Class Point3d
         Return Me.DistanceTo(p) < GeometRi3D.Tolerance
     End Function
 
+    Public Overrides Function GetHashCode() As Integer
+        Return GeometRi3D.HashFunction(_x, _y, _z, _coord.GetHashCode)
+    End Function
+
 
     ''' <summary>
     ''' String representation of point in global or local coordinate system
