@@ -153,6 +153,64 @@ Public Class Ellipse
         Return New Ellipse(c, v1, v2)
     End Function
 
+    ''' <summary>
+    ''' Intersection of ellipse with plane.
+    ''' Returns object of type 'Nothing', 'Ellipse', 'Point3d' or 'Segment3d'.
+    ''' </summary>
+    Public Function IntersectionWith(s As Plane3d) As Object
+
+        If Me.Normal.IsParallelTo(s.Normal) Then
+
+            If Me.Center.BelongsTo(s) Then
+                ' coplanar objects
+                Return Me.Clone
+            Else
+                ' parallel objects
+                Return Nothing
+            End If
+        Else
+            Dim l As Line3d = s.IntersectionWith(New Plane3d(Me.Center, Me.Normal))
+            Dim local_coord As Coord3d = New Coord3d(Me.Center, Me._v1, Me._v2)
+            Dim p As Point3d = l.Point.ConvertTo(local_coord)
+            Dim v As Vector3d = l.Direction.ConvertTo(local_coord)
+            Dim a As Double = Me.A
+            Dim b As Double = Me.B
+
+            If Abs(v.Y / v.X) > 100 Then
+                ' line is almost vertical, rotate local coord
+                local_coord = New Coord3d(Me.Center, Me._v2, Me._v1)
+                p = l.Point.ConvertTo(local_coord)
+                v = l.Direction.ConvertTo(local_coord)
+                a = Me.B
+                b = Me.A
+            End If
+
+            ' Find intersection of line and ellipse (2D)
+            ' Solution from: http://www.ambrsoft.com/TrigoCalc/Circles2/Ellipse/EllipseLine.htm
+
+            ' Line equation in form: y = mx + c
+            Dim m As Double = v.Y / v.X
+            Dim c As Double = p.Y - m * p.X
+
+            Dim amb As Double = a ^ 2 * m ^ 2 + b ^ 2
+            Dim det As Double = amb - c ^ 2
+            If det < -GeometRi3D.Tolerance Then
+                Return Nothing
+            ElseIf GeometRi3D.AlmostEqual(det, 0) Then
+                Dim x As Double = -a ^ 2 * m * c / amb
+                Dim y As Double = b ^ 2 * c / amb
+                Return New Point3d(x, y, 0, local_coord)
+            Else
+                Dim x1 As Double = (-a ^ 2 * m * c + a * b * Sqrt(det)) / amb
+                Dim x2 As Double = (-a ^ 2 * m * c - a * b * Sqrt(det)) / amb
+                Dim y1 As Double = (b ^ 2 * c + a * b * m * Sqrt(det)) / amb
+                Dim y2 As Double = (b ^ 2 * c - a * b * m * Sqrt(det)) / amb
+                Return New Segment3d(New Point3d(x1, y1, 0, local_coord), New Point3d(x2, y2, 0, local_coord))
+            End If
+        End If
+
+    End Function
+
 #Region "TranslateRotateReflect"
     ''' <summary>
     ''' Translate ellipse by a vector

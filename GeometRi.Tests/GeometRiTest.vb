@@ -1125,6 +1125,20 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.IsTrue(p.BelongsTo(e.ProjectionTo(s)))
     End Sub
 
+    <TestMethod()> Public Sub EllipseIntersectionWithPlaneTest()
+        Dim p As Point3d = New Point3d(0, 0, 0)
+        Dim v1 As Vector3d = New Vector3d(4, 0, 0)
+        Dim v2 As Vector3d = New Vector3d(0, 6, 0)
+        Dim e As Ellipse = New Ellipse(p, v1, v2)
+
+        p = New Point3d(0, 50, 0)
+        v1 = New Vector3d(-1000, 1, 0)
+        Dim s As Plane3d = New Plane3d(p, v1)
+
+        Dim res As Segment3d = New Segment3d(New Point3d(-0.044000363016971585, 5.9996369830284184, 0), New Point3d(-0.055999411983534669, -5.9994119835346664, 0))
+        Assert.AreEqual(e.IntersectionWith(s), res)
+    End Sub
+
 
     '===============================================================
     ' Triangle tests
