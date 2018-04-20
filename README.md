@@ -1,6 +1,8 @@
 # GeometRi
 ## Simple and lightweight computational geometry library for .Net
 
+### This version is obsolete. Please use C# version if the library: [GeometRi.CSharp](https://github.com/RiSearcher/GeometRi.CSharp)
+
 GeomtRi is a simple and lightweight 3D geometry library for .Net.
 It is not one more 3D graphics library, its main job is manipulations with basic
 geometrical primitives, such as point, line, plane, segment in 3D space:
